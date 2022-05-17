@@ -1,0 +1,10 @@
+hvec_importers/__pycache__/__init__.cpython-310.pyc
+hvec_importers/__pycache__/admin.cpython-310.pyc
+hvec_importers/__pycache__/psmsl.cpython-310.pyc
+hvec_importers/__pycache__/support.cpython-310.pyc
+hvec_importers.egg-info/dependency_links.txt
+hvec_importers.egg-info/PKG-INFO
+hvec_importers.egg-info/requires.txt
+hvec_importers.egg-info/SOURCES.txt
+hvec_importers.egg-info/top_level.txt
+tests/__pycache__/test_psmsl.cpython-310-pytest-7.1.1.pyc

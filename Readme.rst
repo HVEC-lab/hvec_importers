@@ -1,0 +1,1 @@
+This package contains solvers, parsers and visualisations for analysis of tides.
