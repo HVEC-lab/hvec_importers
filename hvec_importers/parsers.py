@@ -5,6 +5,7 @@ Prepared by HVEC lab, 2022
 
 # Public packages
 import pandas as pd
+from scipy.stats import norm
 
 
 def ipcc_single_sheet(raw):
@@ -64,7 +65,9 @@ def ipcc_single_sheet(raw):
         tmp, on = ['psmsl_id', 'process',
         'confidence', 'scenario', 'year'],
         how = 'inner')
-            
+
+    factor = norm.ppf(0.90)  # Factor for estimating sigma
+    df['sigma'] = (df['90%_high'] - df['median']) / factor            
     return df
 
 
