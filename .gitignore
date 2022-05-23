@@ -8,3 +8,7 @@ hvec_importers.egg-info/requires.txt
 hvec_importers.egg-info/SOURCES.txt
 hvec_importers.egg-info/top_level.txt
 tests/__pycache__/test_psmsl.cpython-310-pytest-7.1.1.pyc
+hvec_importers/__pycache__/ipcc.cpython-310.pyc
+tests/__pycache__/test_ipcc.cpython-310-pytest-7.1.1.pyc
+.gitignore
+hvec_importers/__pycache__/parsers.cpython-310.pyc

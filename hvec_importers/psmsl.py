@@ -10,6 +10,7 @@ Developed by HVEC-lab, 2022
 
 # Public packages
 import pandas as pd
+import requests
 import warnings
 
 
@@ -79,6 +80,9 @@ def id_from_name(name, include_metric = False):
     if len(selected) == 0:
         warnings.warn('No data found for ' + name)
         return
+    elif len(selected) > 1:
+        warnings.warn('Multiple locations selected for ', name, '. Specify longer name')
+        return
     else:
         id = selected['ID'].squeeze()
         return id
@@ -112,18 +116,24 @@ def data_single_id(id, freq = 'annual', type = 'rlr'):
     base = url[freq + '_' + type]
     data_url = str(id) + '.' + type + 'data'
 
-    df = pd.read_csv(
-        base + data_url,
-        sep = ';',
-        header = None,
-        usecols = [0, 1],
-        na_values = -99999
+    # PSMSL contains pages without data
+    # Checking or it and continue dependent on condition
+    res = requests.get(base + data_url)
+
+    if len(res.text) > 0:
+        df = pd.read_csv(
+            base + data_url,
+            sep = ';',
+            header = None,
+            usecols = [0, 1],
+            na_values = -99999
         )
-    
-    df.columns = ['time', 'level']
-    df['id'] = id
-    df['name'] = name
-    df['type'] = type
+        df.columns = ['time', 'level']
+        df['id'] = id
+        df['name'] = name
+        df['type'] = type
+    else:
+        df = pd.DataFrame()
 
     return df
 

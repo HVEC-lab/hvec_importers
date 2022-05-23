@@ -53,8 +53,7 @@ def test_station_list_columns_complete():
     ('delf', False, 24),
     ('zijl', False, 24),
     ('Brest', False, 1),
-    ('Cuxhaven', False, 7),
-    ('Cux', True, [7, 222])
+    ('Cuxhaven', False, 7)
     ]
 )
 def test_id_from_name(
