@@ -12,8 +12,9 @@ Developed by HVEC-lab, 2022
 
 # Public packages
 import pandas as pd
-import warnings
 import requests
+import warnings
+
 
 # Company packages
 import hvec_importers.psmsl as psmsl
@@ -41,7 +42,7 @@ def data_single_id(id):
     # If scenario data is provided, the file contains nine sheets
     # and else only 1. We are interested in files with data only
     if len(data) == 1:
-        warnings.warn('Only one sheet found. File for @name contains no scenario data')
+        warnings.warn(f'Only one sheet found. File for {id, name} contains no scenario data')
         return pd.DataFrame()
     else:
         df = parse.ipcc_workbook(data)
