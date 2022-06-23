@@ -117,7 +117,7 @@ def data_single_id(id, freq = 'annual', type = 'rlr'):
     data_url = str(id) + '.' + type + 'data'
 
     # PSMSL contains pages without data
-    # Checking or it and continue dependent on condition
+    # Checking for it and continue dependent on condition
     res = requests.get(base + data_url)
 
     if len(res.text) > 0:
