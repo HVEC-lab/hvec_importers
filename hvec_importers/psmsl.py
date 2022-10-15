@@ -9,9 +9,9 @@ Developed by HVEC-lab, 2022
 
 
 # Public packages
+import warnings
 import pandas as pd
 import requests
-import warnings
 
 
 url = {
@@ -21,24 +21,24 @@ url = {
     'monthly_rlr': 'https://psmsl.org/data/obtaining/rlr.monthly.data/',
     'monthly_met': 'https://psmsl.org/data/obtaining/met.monthly.data/'
 }
-    
-    
+
+
 def station_list(include_metric = False):
     """
-    Obtain the list of stations and station ID from 
+    Obtain the list of stations and station ID from
     the PSMSL website.
 
     Points of attention
     -------------------
     -   The "rlr" stations have data that is corrected for
         reference level changes. "metric" stations do not.
-    -   PSMSL suggests not to use metric stations. However, 
+    -   PSMSL suggests not to use metric stations. However,
         this function allows for metric stations to be imported
     -   Not importing "metric" is default
     -   Station type is added as a column to the output if metric
         is included
-    -   We use pandas to read tables from the website. Output is a 
-        list of dataframes. We know that there is only a single 
+    -   We use pandas to read tables from the website. Output is a
+        list of dataframes. We know that there is only a single
         dataframe present on each site and select it
     """
     stations = pd.read_html(
