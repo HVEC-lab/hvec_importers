@@ -1,6 +1,5 @@
 """
-Import of data from the Permanent Service for
-Mean Sea Level (PSMSL).
+Import of data from the Permanent Service for Mean Sea Level (PSMSL).
 
 Sub-package of hvec_importers.
 
@@ -41,18 +40,12 @@ def station_list(include_metric = False):
         list of dataframes. We know that there is only a single
         dataframe present on each site and select it
     """
-    stations = pd.read_html(
-        url['rlr'])[0]
-    
+    stations = pd.read_html(url['rlr'])[0]
     stations['type'] = 'rlr'
 
     if include_metric:
-        tmp = pd.read_html(
-            url['met']
-        )[0]
-
+        tmp = pd.read_html(url['met'])[0]
         tmp['type'] = 'met'
-
         stations = pd.concat([stations, tmp])
 
     return stations
