@@ -12,6 +12,9 @@ import warnings
 import pandas as pd
 import requests
 
+# Other sub-packages
+from hvec_importers import helpers
+
 
 url = {
     'rlr': 'https://psmsl.org/data/obtaining/index.php',
@@ -55,30 +58,8 @@ def id_from_name(name, include_metric = False):
     """
     Select station ID from a name.
     """
-
-    name = name.upper()  # Set input to upper case, ensuring
-                         # case-insensitive selection
-
-    stations = station_list(
-        include_metric
-    )
-
-    stations.columns = stations.columns.str.replace(' ', '')
-    stations['StationName'] = stations['StationName'].str.upper()
-
-    selected = stations.query(
-        'StationName.str.contains(@name)', engine='python'
-    )
-
-    if len(selected) == 0:
-        warnings.warn('No data found for ' + name)
-        return
-    elif len(selected) > 1:
-        warnings.warn('Multiple locations selected for ', name, '. Specify longer name')
-        return
-    else:
-        id = selected['ID'].squeeze()
-        return id
+    id = helpers.id_from_name(station_list, name, include_metric = include_metric)
+    return id
 
 
 def data_single_id(id, freq = 'annual', type = 'rlr'):
@@ -111,7 +92,7 @@ def data_single_id(id, freq = 'annual', type = 'rlr'):
 
     # PSMSL contains pages without data
     # Checking for it and continue dependent on condition
-    res = requests.get(base + data_url)
+    res = requests.get(base + data_url, timeout = 10)
 
     if len(res.text) > 0:
         df = pd.read_csv(
