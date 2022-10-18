@@ -67,14 +67,14 @@ def ipcc_single_sheet(raw):
         how = 'inner')
 
     factor = norm.ppf(0.95)  # Factor for estimating sigma
-    df['sigma'] = (df['90%_high'] - df['median']) / factor            
+    df['sigma'] = (df['90%_high'] - df['median']) / factor
     return df
 
 
 def ipcc_workbook(book):
     """
     Parse the 8 data sheets from IPCC into a dataframe
-    in long format with subprocesses indicated in the 
+    in long format with subprocesses indicated in the
     correct column
     """
 
