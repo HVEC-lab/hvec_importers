@@ -15,6 +15,7 @@ by name and GLOSS id implemented.
 import warnings
 import requests
 import pandas as pd
+import datetime as dt
 
 from hvec_importers import helpers
 
@@ -59,7 +60,7 @@ def id_from_name(name):
     return id
 
 
-def data_single_id(id, type = 'fast_delivery'):
+def data_single_id(id, type = 'fast_delivery', drop_current_year = False):
     """
     Get data of a gloss station selected by station_ID.
 
@@ -87,8 +88,14 @@ def data_single_id(id, type = 'fast_delivery'):
     if res.ok:
         df = pd.read_csv(
             base + data_url, header = 0, skiprows = [1])
+
+        df['time'] = pd.to_datetime(df['time'], yearfirst = True)
+
+        if drop_current_year:
+            df = df.loc[df['time'].dt.year < dt.date.today().year]
     else:
         df = pd.DataFrame()
+
     return df
 
 
