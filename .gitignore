@@ -21,3 +21,6 @@ hvec_importers/__pycache__/helpers.cpython-310.pyc
 .gitignore
 .gitignore
 tests/__pycache__/test_psmsl.cpython-310-pytest-7.1.3.pyc
+tests/__pycache__/test_gloss.cpython-310-pytest-7.1.3.pyc
+.gitignore
+tests/__pycache__/test_psmsl.cpython-310-pytest-7.1.3.pyc

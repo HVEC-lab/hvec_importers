@@ -13,11 +13,18 @@ by name and GLOSS id implemented.
 
 # Public packages
 import warnings
+import io
+import logging
 import requests
+import time
 import pandas as pd
 import datetime as dt
 
 from hvec_importers import helpers
+
+
+max_attempt = 20
+timeout = 30  # Maximum number of tries to contact a website
 
 
 url = {
@@ -44,10 +51,13 @@ def station_list():
       the near future
     """
     stations = pd.read_html(url['gloss_core_network'])[0]
+
     stations.rename(
         columns = {
             'Station': 'StationName',
-            'GLOSS number': 'ID'},
+            'GLOSS number': 'ID',
+            'Longitude (+ve\xa0E)': 'Longitude (+deg E)',
+            'Latitude (+ve\xa0N)': 'Latitude (+deg N)'},
             inplace = True)
     return stations
 
@@ -60,7 +70,7 @@ def id_from_name(name):
     return id
 
 
-def data_single_id(id, type = 'fast_delivery', drop_current_year = False):
+def data_single_id(id, session, type = 'fast_delivery', drop_current_year = False):
     """
     Get data of a gloss station selected by station_ID.
 
@@ -82,17 +92,25 @@ def data_single_id(id, type = 'fast_delivery', drop_current_year = False):
     base = url[type]
     data_url = str(id)
 
-    # Check if data is present
-    res = requests.get(base + data_url, timeout = 10)
+    # Get data
+    for n in range(max_attempt):  # Make repeated requests to website
+        try:
+            res = session.get(base + data_url, timeout = timeout)
+            if res.ok: break
+        except Exception as e:
+            logging.warning('gloss.data_single_id: Attempt ' + str(n) + ';' + str(e))
+            time.sleep(5) # Wait before trying again
 
     if res.ok:
-        df = pd.read_csv(
-            base + data_url, header = 0, skiprows = [1])
+        df = pd.read_csv(io.BytesIO(res.content), header = 0, skiprows = [1])
 
-        df['time'] = pd.to_datetime(df['time'], yearfirst = True)
-
+        #TODO check timezone definitiions in original data
+        df['time'] = pd.to_datetime(df['time'], yearfirst = True).dt.tz_convert(None)
         if drop_current_year:
             df = df.loc[df['time'].dt.year < dt.date.today().year]
+        
+        df['sea_level'] = df['sea_level'].div(1000)
+
     else:
         df = pd.DataFrame()
 
