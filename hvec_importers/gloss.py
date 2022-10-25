@@ -24,7 +24,7 @@ from hvec_importers import helpers
 
 
 max_attempt = 20
-timeout = 30  # Maximum number of tries to contact a website
+timeout = 10  # Maximum number of tries to contact a website
 
 
 url = {
@@ -104,6 +104,7 @@ def data_single_id(id, session, type = 'fast_delivery', drop_current_year = Fals
     if res.ok:
         df = pd.read_csv(io.BytesIO(res.content), header = 0, skiprows = [1])
 
+        df.dropna(axis = 'rows', how = 'any', inplace = True)
         #TODO check timezone definitiions in original data
         df['time'] = pd.to_datetime(df['time'], yearfirst = True).dt.tz_convert(None)
         if drop_current_year:
