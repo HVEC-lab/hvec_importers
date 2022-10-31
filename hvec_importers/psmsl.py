@@ -51,9 +51,8 @@ def station_list(include_metric = False):
         tmp['type'] = 'met'
         stations = pd.concat([stations, tmp])
 
-    stations.rename(
-        {'Station Name': 'name'}, inplace = True
-    )
+    stations.rename(columns = {'Station Name': 'name'}, inplace = True)
+    stations.set_index(keys = 'ID', inplace = True)
 
     return stations
 
@@ -82,14 +81,6 @@ def data_single_id(id, freq = 'annual', type = 'rlr'):
     if (freq == 'annual') and (type == 'met'):
         raise ValueError('Only monthly data for metric')
 
-    # Get station name
-    try:
-        stations = station_list(include_metric = True)
-        name = stations.loc[stations['ID'] == id, "Station Name"].squeeze()
-    except:
-        warnings.warn('Station with id ', id, ' not found')
-        return
-
     # Assemble url
     base = url[freq + '_' + type]
     data_url = str(id) + '.' + type + 'data'
@@ -108,7 +99,6 @@ def data_single_id(id, freq = 'annual', type = 'rlr'):
         )
         df.columns = ['time', 'level']
         df['id'] = id
-        df['name'] = name
         df['type'] = type
     else:
         df = pd.DataFrame()
