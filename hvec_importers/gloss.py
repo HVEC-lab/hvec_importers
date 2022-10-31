@@ -54,11 +54,13 @@ def station_list():
 
     stations.rename(
         columns = {
-            'Station': 'StationName',
+            'Station': 'name',
             'GLOSS number': 'ID',
             'Longitude (+ve\xa0E)': 'Longitude (+deg E)',
             'Latitude (+ve\xa0N)': 'Latitude (+deg N)'},
             inplace = True)
+    
+    stations.set_index(keys = 'ID', inplace = True)
     return stations
 
 
@@ -96,7 +98,10 @@ def data_single_id(id, session, type = 'fast_delivery', drop_current_year = Fals
     for n in range(max_attempt):  # Make repeated requests to website
         try:
             res = session.get(base + data_url, timeout = timeout)
-            if res.ok: break
+            if res.ok: 
+                break
+            logging.warning(f'gloss.data_single_id: Attempt {n}')
+            time.sleep(5)
         except Exception as e:
             logging.warning('gloss.data_single_id: Attempt ' + str(n) + ';' + str(e))
             time.sleep(5) # Wait before trying again

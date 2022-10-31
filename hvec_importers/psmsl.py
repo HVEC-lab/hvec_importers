@@ -51,6 +51,10 @@ def station_list(include_metric = False):
         tmp['type'] = 'met'
         stations = pd.concat([stations, tmp])
 
+    stations.rename(
+        {'Station Name': 'name'}, inplace = True
+    )
+
     return stations
 
 
