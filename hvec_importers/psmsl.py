@@ -10,7 +10,7 @@ Developed by HVEC-lab, 2022
 # Public packages
 import logging
 import pandas as pd
-import requests
+import time
 
 # Other sub-packages
 from hvec_importers import helpers
@@ -89,6 +89,7 @@ def data_single_id(id, session, freq = 'annual', tp = 'rlr'):
     # PSMSL contains pages without data
     # Checking for it and continue dependent on condition
     res = session.get(base + data_url, timeout = 60)
+    time.sleep(2)  # Prevent overloading the website
 
     if len(res.text) > 0:
         df = pd.read_csv(
