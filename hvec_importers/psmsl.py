@@ -8,7 +8,7 @@ Developed by HVEC-lab, 2022
 
 
 # Public packages
-import warnings
+import logging
 import pandas as pd
 import requests
 
@@ -25,7 +25,7 @@ url = {
 }
 
 
-def station_list(include_metric = False):
+def station_list(include_metric = True):
     """
     Obtain the list of stations and station ID from
     the PSMSL website.
@@ -65,29 +65,30 @@ def id_from_name(name, include_metric = False):
     return id
 
 
-def data_single_id(id, freq = 'annual', type = 'rlr'):
+def data_single_id(id, session, freq = 'annual', tp = 'rlr'):
     """
     Get data of a PSMSL station selected by station_ID
     """
 
     # Errors and warnings
     assert (freq in ['annual', 'monthly']), 'freq should be annual or monthly'
-    assert (type in ['rlr', 'met']), 'type should be rlr or met'
+    assert (tp in ['rlr', 'met']), 'type should be rlr or met'
     assert isinstance(id, int), 'id should be integer'
 
     if type == 'met':
-        warnings.warn('Metric data is not research quality!')
+        logging.warning('Metric data is not research quality!')
 
-    if (freq == 'annual') and (type == 'met'):
-        raise ValueError('Only monthly data for metric')
+    if (freq == 'annual') and (tp == 'met'):
+        logging.warning('Only monthly data for metric. Empty dataframe returned')
+        return pd.DataFrame()
 
     # Assemble url
-    base = url[freq + '_' + type]
-    data_url = str(id) + '.' + type + 'data'
+    base = url[freq + '_' + tp]
+    data_url = str(id) + '.' + tp + 'data'
 
     # PSMSL contains pages without data
     # Checking for it and continue dependent on condition
-    res = requests.get(base + data_url, timeout = 10)
+    res = session.get(base + data_url, timeout = 60)
 
     if len(res.text) > 0:
         df = pd.read_csv(
@@ -99,8 +100,11 @@ def data_single_id(id, freq = 'annual', type = 'rlr'):
         )
         df.columns = ['time', 'level']
         df['id'] = id
-        df['type'] = type
+        
+        df['freq'] = freq
+        df['type'] = tp
     else:
+        logging.warning('No data available on site. Empty dataframe returned.')
         df = pd.DataFrame()
 
     return df
