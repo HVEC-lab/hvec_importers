@@ -59,8 +59,9 @@ def station_list():
             'Longitude (+ve\xa0E)': 'Longitude (+deg E)',
             'Latitude (+ve\xa0N)': 'Latitude (+deg N)'},
             inplace = True)
-    
+
     stations.set_index(keys = 'ID', inplace = True)
+    stations.sort_values(by = 'name', inplace = True)
     return stations
 
 
@@ -72,7 +73,7 @@ def id_from_name(name):
     return id
 
 
-def data_single_id(id, session, type = 'fast_delivery', drop_current_year = False):
+def data_single_id(id, session, type = 'fast_delivery', drop_current_year = True):
     """
     Get data of a gloss station selected by station_ID.
 
@@ -115,6 +116,7 @@ def data_single_id(id, session, type = 'fast_delivery', drop_current_year = Fals
             df = df.loc[df['time'].dt.year < dt.date.today().year]
         
         df['sea_level'] = df['sea_level'].div(1000)
+        df.rename(columns = {'station_name': 'name'}, inplace = True)
 
     else:
         df = pd.DataFrame()

@@ -54,6 +54,7 @@ def station_list(include_metric = False):
 
     stations.rename(columns = {'Station Name': 'name'}, inplace = True)
     stations.set_index(keys = 'ID', inplace = True)
+    stations.sort_values(by = 'name', inplace = True)
 
     return stations
 
