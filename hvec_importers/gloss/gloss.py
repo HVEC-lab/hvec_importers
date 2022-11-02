@@ -57,8 +57,8 @@ def station_list():
         columns = {
             'Station': 'name',
             'GLOSS number': 'ID',
-            'Longitude (+ve\xa0E)': 'Longitude (+deg E)',
-            'Latitude (+ve\xa0N)': 'Latitude (+deg N)'},
+            'Longitude (+ve\xa0E)': 'longitude',
+            'Latitude (+ve\xa0N)': 'latitude'},
             inplace = True)
 
     parse.parseStationList(stations)
