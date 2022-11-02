@@ -10,7 +10,7 @@ import pytest as pyt
 import requests
 
 # Company package
-import hvec_importers.psmsl as psmsl
+from hvec_importers.psmsl import psmsl
 
 
 @pyt.mark.parametrize(
@@ -27,7 +27,7 @@ def test_connections(key):
 @pyt.mark.parametrize(
     "include_metric, number_of_rows",
     [(False, 1548),
-    (True, 2362)
+    (True, 2363)
     ]
 )
 def test_station_list_complete_input(
@@ -64,7 +64,7 @@ def test_id_from_name(
 
 
 def test_data_single_id():
-    data = psmsl.data_single_id(id = 24)
+    data = psmsl.data_single_id(session = requests.session(), id = 24)
     assert len(data) > 0
 
 

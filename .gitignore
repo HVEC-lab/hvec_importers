@@ -25,3 +25,11 @@ tests/__pycache__/test_gloss.cpython-310-pytest-7.1.3.pyc
 .gitignore
 tests/__pycache__/test_psmsl.cpython-310-pytest-7.1.3.pyc
 data_importer.log
+hvec_importers/rws/__pycache__/rws.cpython-310.pyc
+hvec_importers/ipcc/__pycache__/ipcc.cpython-310.pyc
+hvec_importers/ipcc/__pycache__/parsers.cpython-310.pyc
+hvec_importers/knmi/__pycache__/knmi.cpython-310.pyc
+hvec_importers/psmsl/__pycache__/psmsl.cpython-310.pyc
+tests/__pycache__/test_gloss.cpython-310-pytest-7.1.1.pyc
+tests/__pycache__/test_gloss.cpython-310-pytest-7.1.1.pyc
+None

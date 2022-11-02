@@ -16,8 +16,8 @@ import pandas as pd
 
 
 # Company packages
-import hvec_importers.psmsl as psmsl
-import hvec_importers.parsers as parse
+from hvec_importers.psmsl import psmsl
+from hvec_importers.ipcc import parsers as parse
 
 
 url = 'https://d3qt3aobtsas2h.cloudfront.net/edge/ws/search/projection?psmsl_id='
@@ -37,7 +37,7 @@ def data_single_id(id):
     """
     try:
         stations = station_list()
-        name = stations.loc[stations['ID'] == id, "Station Name"].squeeze()
+        name = stations.loc[stations.index == id, "name"].squeeze()
     except:
         logging.warning(f'Station with id {id} not found')
         return

@@ -21,6 +21,7 @@ import pandas as pd
 import datetime as dt
 
 from hvec_importers import helpers
+from hvec_importers import parsers as parse
 
 
 max_attempt = 5
@@ -60,8 +61,7 @@ def station_list():
             'Latitude (+ve\xa0N)': 'Latitude (+deg N)'},
             inplace = True)
 
-    stations.set_index(keys = 'ID', inplace = True)
-    stations.sort_values(by = 'name', inplace = True)
+    parse.parseStationList(stations)
     return stations
 
 

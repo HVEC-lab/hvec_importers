@@ -10,7 +10,7 @@ import pytest as pyt
 import requests
 
 # Company package
-import hvec_importers.ipcc as ipcc
+from hvec_importers.ipcc import ipcc
 
 
 @pyt.mark.parametrize(

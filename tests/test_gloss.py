@@ -10,7 +10,7 @@ import pytest as pyt
 import requests
 
 # Company package
-from hvec_importers import gloss
+from hvec_importers.gloss import gloss
 
 
 @pyt.mark.parametrize(
@@ -54,12 +54,12 @@ def test_id_from_name(name, id_expected):
 
 @pyt.mark.parametrize(
     "id, length",
-    [(75, 130320),
+    [(75, 107643),
     (257, 0),
-    (284, 917559),
-    (242, 1548552),
+    (284, 909224),
+    (242, 1414247),
     (5, 0)]
 )
 def test_data_single_id(id, length):
-    data = gloss.data_single_id(id = id)
+    data = gloss.data_single_id(session = requests.session(), id = id)
     assert len(data) == length

@@ -15,6 +15,7 @@ import time
 
 # Other sub-packages
 from hvec_importers import helpers
+from hvec_importers import parsers as parse
 
 
 url = {
@@ -53,8 +54,8 @@ def station_list(include_metric = False):
         stations = pd.concat([stations, tmp])
 
     stations.rename(columns = {'Station Name': 'name'}, inplace = True)
-    stations.set_index(keys = 'ID', inplace = True)
-    stations.sort_values(by = 'name', inplace = True)
+
+    stations = parse.parseStationList(stations)
 
     return stations
 
