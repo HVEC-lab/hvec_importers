@@ -9,6 +9,7 @@ Developed by HVEC-lab, 2022
 
 # Public packages
 import logging
+import io
 import pandas as pd
 import time
 
@@ -25,7 +26,7 @@ url = {
 }
 
 
-def station_list(include_metric = True):
+def station_list(include_metric = False):
     """
     Obtain the list of stations and station ID from
     the PSMSL website.
@@ -93,7 +94,7 @@ def data_single_id(id, session, freq = 'annual', tp = 'rlr'):
 
     if len(res.text) > 0:
         df = pd.read_csv(
-            base + data_url,
+            io.BytesIO(res.content),
             sep = ';',
             header = None,
             usecols = [0, 1],
