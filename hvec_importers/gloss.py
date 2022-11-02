@@ -114,10 +114,8 @@ def data_single_id(id, session, type = 'fast_delivery', drop_current_year = True
         df['time'] = pd.to_datetime(df['time'], yearfirst = True).dt.tz_convert(None)
         if drop_current_year:
             df = df.loc[df['time'].dt.year < dt.date.today().year]
-        
-        df['sea_level'] = df['sea_level'].div(1000)
-        df.rename(columns = {'station_name': 'name'}, inplace = True)
 
+        df['sea_level'] = df['sea_level'].div(1000)
     else:
         df = pd.DataFrame()
 
