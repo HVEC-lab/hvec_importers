@@ -106,6 +106,7 @@ def data_single_id(id, session, freq = 'annual', tp = 'rlr'):
         
         df['freq'] = freq
         df['type'] = tp
+        df['level'] = df['level'].div(1000)
     else:
         logging.warning('No data available on site. Empty dataframe returned.')
         df = pd.DataFrame()
