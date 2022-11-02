@@ -9,6 +9,6 @@ def parseStationList(stations):
     """
     Set details of the data structure
     """
-    stations.set_index(keys = 'ID', inplace = True)
+    stations.set_index(keys = 'id', inplace = True)
     stations.sort_values(by = 'name', inplace = True)
     return stations

@@ -56,12 +56,12 @@ def station_list():
     stations.rename(
         columns = {
             'Station': 'name',
-            'GLOSS number': 'ID',
+            'GLOSS number': 'id',
             'Longitude (+ve\xa0E)': 'longitude',
             'Latitude (+ve\xa0N)': 'latitude'},
             inplace = True)
 
-    parse.parseStationList(stations)
+    stations = parse.parseStationList(stations)
     return stations
 
 
@@ -116,6 +116,7 @@ def data_single_id(id, session, type = 'fast_delivery', drop_current_year = True
             df = df.loc[df['time'].dt.year < dt.date.today().year]
 
         df['sea_level'] = df['sea_level'].div(1000)
+        df.rename(columns = {'gloss_id': 'id', 'sea_level': 'level'}, inplace = True)
     else:
         df = pd.DataFrame()
 

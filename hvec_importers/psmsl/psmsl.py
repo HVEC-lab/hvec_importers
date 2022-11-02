@@ -53,7 +53,7 @@ def station_list(include_metric = False):
         tmp['type'] = 'met'
         stations = pd.concat([stations, tmp])
 
-    stations.rename(columns = {'Station Name': 'name'}, inplace = True)
+    stations.rename(columns = {'Station Name': 'name', 'ID': 'id'}, inplace = True)
 
     stations = parse.parseStationList(stations)
 
@@ -68,7 +68,7 @@ def id_from_name(name, include_metric = False):
     return id
 
 
-def data_single_id(id, session, freq = 'annual', tp = 'rlr'):
+def data_single_id(nr, session, freq = 'annual', tp = 'rlr'):
     """
     Get data of a PSMSL station selected by station_ID
     """
@@ -76,7 +76,7 @@ def data_single_id(id, session, freq = 'annual', tp = 'rlr'):
     # Errors and warnings
     assert (freq in ['annual', 'monthly']), 'freq should be annual or monthly'
     assert (tp in ['rlr', 'met']), 'type should be rlr or met'
-    assert isinstance(id, int), 'id should be integer'
+    assert isinstance(nr, int), 'id should be integer'
 
     if type == 'met':
         logging.warning('Metric data is not research quality!')
@@ -87,7 +87,7 @@ def data_single_id(id, session, freq = 'annual', tp = 'rlr'):
 
     # Assemble url
     base = url[freq + '_' + tp]
-    data_url = str(id) + '.' + tp + 'data'
+    data_url = str(nr) + '.' + tp + 'data'
 
     # PSMSL contains pages without data
     # Checking for it and continue dependent on condition
@@ -102,9 +102,9 @@ def data_single_id(id, session, freq = 'annual', tp = 'rlr'):
             usecols = [0, 1],
             na_values = -99999
         )
-        df.columns = ['time', 'level']
-        df['id'] = id
         
+        df.columns = ['time', 'level']
+        df['id'] = nr
         df['freq'] = freq
         df['type'] = tp
         df['level'] = df['level'].div(1000)
