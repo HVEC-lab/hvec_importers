@@ -23,8 +23,8 @@ import datetime as dt
 from hvec_importers import helpers
 
 
-max_attempt = 20
-timeout = 10  # Maximum number of tries to contact a website
+max_attempt = 5
+timeout = 20  # Maximum number of tries to contact a website
 
 
 url = {
