@@ -98,13 +98,12 @@ def data_single_id(id, session, type = 'fast_delivery', drop_current_year = Fals
     for n in range(max_attempt):  # Make repeated requests to website
         try:
             res = session.get(base + data_url, timeout = timeout)
+            time.sleep(2)
             if res.ok: 
                 break
             logging.warning(f'gloss.data_single_id: Attempt {n}')
-            time.sleep(5)
         except Exception as e:
-            logging.warning('gloss.data_single_id: Attempt ' + str(n) + ';' + str(e))
-            time.sleep(5) # Wait before trying again
+            logging.warning('gloss.data_single_id: Attempt ' + str(n) + ';' + str(e)) # Wait before trying again
 
     if res.ok:
         df = pd.read_csv(io.BytesIO(res.content), header = 0, skiprows = [1])
