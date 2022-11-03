@@ -44,12 +44,7 @@ url = {
 
 def station_list():
     """
-    Obtain the list of stations and station data from the GLOSS station handbook
-
-    Points of attention
-    -------------------
-    - The GLOSS website is being reorganised. The list possbilly moves to a new location in
-      the near future
+    Obtain the list of stations and station data from the GLOSS core network list
     """
     stations = pd.read_html(url['gloss_core_network'])[0]
 
@@ -121,7 +116,3 @@ def data_single_id(id, session, type = 'fast_delivery', drop_current_year = True
         df = pd.DataFrame()
 
     return df
-
-
-
-
