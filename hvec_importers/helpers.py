@@ -18,11 +18,9 @@ def id_from_name(StationLister, name, **kwargs):
     stations = StationLister(**kwargs)
 
     stations.columns = stations.columns.str.replace(' ', '')
-    stations['StationName'] = stations['StationName'].str.upper()
+    stations['name'] = stations['name'].str.upper()
 
-    selected = stations.query(
-        'StationName.str.contains(@name)', engine='python'
-    )
+    selected = stations.query('name.str.contains(@name)', engine='python')
 
     if len(selected) == 0:
         warnings.warn('No data found for ' + name)
@@ -30,5 +28,6 @@ def id_from_name(StationLister, name, **kwargs):
     if len(selected) > 1:
         warnings.warn('Multiple locations selected for ', name, '. Specify longer name')
         return
-    id = selected['ID'].squeeze()
+    #TODO find better solution
+    id = selected.reset_index()['id'].squeeze()
     return id

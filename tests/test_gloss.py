@@ -24,7 +24,7 @@ def test_connections(url):
     assert res.ok
 
 
-@pyt.mark.parametrize("number_of_rows", [290])
+@pyt.mark.parametrize("number_of_rows", [294])
 def test_station_list_complete_input(number_of_rows):
     names = gloss.station_list()
     assert len(names) == number_of_rows
@@ -32,7 +32,7 @@ def test_station_list_complete_input(number_of_rows):
 
 def test_station_list_columns_complete():
     names = gloss.station_list()
-    assert 'Country' in names.columns
+    assert 'name' in names.columns
 
 
 @pyt.mark.parametrize(

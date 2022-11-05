@@ -12,6 +12,7 @@ import logging
 import io
 import pandas as pd
 import time
+import requests
 
 # Other sub-packages
 from hvec_importers import helpers
@@ -123,9 +124,13 @@ def data_single_name(
     """
     Get data of a PSMSL station selected by name
     """
+    session = requests.session()
+
     try:
         id = id_from_name(name, include_metric).item()
-        df = data_single_id(id, freq, type)
+        df = data_single_id(id, session, freq, type)
     except:
         raise NameError('No data found for ' + name)
+    
+    session.close()
     return df

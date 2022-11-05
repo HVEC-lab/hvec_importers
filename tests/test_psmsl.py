@@ -64,7 +64,7 @@ def test_id_from_name(
 
 
 def test_data_single_id():
-    data = psmsl.data_single_id(session = requests.session(), id = 24)
+    data = psmsl.data_single_id(session = requests.session(), nr = 24)
     assert len(data) > 0
 
 

@@ -29,7 +29,7 @@ timeout = 20  # Maximum number of tries to contact a website
 
 
 url = {
-    'gloss_core_network': 'https://www.gloss-sealevel.org/gloss-station-handbook',
+    'gloss_core_network': 'https://gloss-sealevel.org/gloss-core-network',
     'fast_delivery':
         'https://uhslc.soest.hawaii.edu/erddap/tabledap/global_hourly_fast.csv?sea_level%2Ctime'
         '%2Cstation_name%2Crecord_id%2Cuhslc_id%2Cgloss_id%2Cssc_id%2Clast_rq_date&time'
@@ -46,14 +46,14 @@ def station_list():
     """
     Obtain the list of stations and station data from the GLOSS core network list
     """
-    stations = pd.read_html(url['gloss_core_network'])[0]
+    stations = pd.read_html(url['gloss_core_network'], header = 0)[0]
 
     stations.rename(
         columns = {
-            'Station': 'name',
-            'GLOSS number': 'id',
-            'Longitude (+ve\xa0E)': 'longitude',
-            'Latitude (+ve\xa0N)': 'latitude'},
+            'Station Name': 'name',
+            'GLOSS No.': 'id',
+            'Longitude': 'longitude',
+            'Latitude': 'latitude'},
             inplace = True)
 
     stations = parse.parseStationList(stations)
