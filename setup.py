@@ -36,6 +36,10 @@ setup(
     platforms='Windows',
     install_requires=['numpy>=1.17',
                       'pandas>=1.1',
-                      'scipy>=1.3'],
+                      'scipy>=1.3',
+                      'requests',
+                      'tqdm',
+                      'lxml',
+                      'openpyxl'],
     packages=find_packages(exclude=[]),
 )

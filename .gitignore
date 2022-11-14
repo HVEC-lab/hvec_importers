@@ -38,15 +38,11 @@ tests/__pycache__/test_gloss.cpython-310-pytest-7.1.1.pyc
 tests/__pycache__/test_gloss.cpython-310-pytest-7.1.1.pyc
 tests/__pycache__/test_gloss.cpython-310-pytest-7.1.1.pyc
 tests/__pycache__/test_gloss.cpython-310-pytest-7.1.1.pyc
+tests/__pycache__/test_gloss.cpython-310-pytest-7.2.0.pyc
+tests/__pycache__/test_ipcc.cpython-310-pytest-7.2.0.pyc
+tests/__pycache__/test_psmsl.cpython-310-pytest-7.2.0.pyc
 hvec_importers/rws/__pycache__/__init__.cpython-310.pyc
-tests/__pycache__/test_rws.cpython-310-pytest-7.1.1.pyc
-tests/__pycache__/test_psmsl copy.cpython-310-pytest-7.1.1.pyc
-tests/__pycache__/test_gloss.cpython-310-pytest-7.1.1.pyc
-.gitignore
 hvec_importers/rws/__pycache__/catalogues.cpython-310.pyc
-.gitignore
-tests/__pycache__/test_gloss.cpython-310-pytest-7.1.1.pyc
-hvec_importers/rws/catalogues.py
-tests/__pycache__/test_gloss.cpython-310-pytest-7.1.1.pyc
 hvec_importers/rws/__pycache__/constants.cpython-310.pyc
-tests/__pycache__/test_gloss.cpython-310-pytest-7.1.1.pyc
+tests/__pycache__/test_psmsl copy.cpython-310-pytest-7.1.1.pyc
+tests/__pycache__/test_rws.cpython-310-pytest-7.1.1.pyc
