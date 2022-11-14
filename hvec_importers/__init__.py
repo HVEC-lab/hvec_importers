@@ -9,4 +9,4 @@ from .gloss import gloss
 from .ipcc import ipcc
 from .knmi import knmi
 from .psmsl import psmsl
-from .rws import rws
+from .rws import catalogues
