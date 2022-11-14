@@ -4,7 +4,6 @@ General parsers for input functions
 HVEC lab, 2022
 """
 
-
 def parseStationList(stations):
     """
     Set details of the data structure

@@ -7,6 +7,6 @@ from .admin import __author__, __author_email__, __version__
 
 from .gloss import gloss
 from .ipcc import ipcc
-from .knmi import knmi
+#from .knmi import knmi
 from .psmsl import psmsl
-from .rws import rws
+#from .rws import catalogues

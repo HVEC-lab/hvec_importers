@@ -49,3 +49,5 @@ tests/__pycache__/test_rws.cpython-310-pytest-7.1.1.pyc
 hvec_importers/gloss/__pycache__/__init__.cpython-310.pyc
 tests/__pycache__/test_rws.cpython-310-pytest-7.2.0.pyc
 hvec_importers.code-workspace
+hvec_importers/ipcc/__pycache__/__init__.cpython-310.pyc
+.gitignore
