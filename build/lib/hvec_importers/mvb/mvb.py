@@ -38,7 +38,6 @@ import numpy as np
 import requests
 import json
 import matplotlib.pyplot as plt
-from tqdm import tqdm
 #from datetime import datetime
 
 #Default values:
@@ -232,7 +231,7 @@ def get_data(token,stationparameter,tstart,tstop):
     v=np.array([])
     t=np.array([], dtype="datetime64[s]")
     
-    for i in tqdm(range(len(t_start))):
+    for i in range(len(t_start)):
         if i is len(t_start)-1:
             t_stop = np.datetime64(tstop)
         else:
