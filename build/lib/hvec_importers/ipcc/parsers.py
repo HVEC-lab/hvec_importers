@@ -68,6 +68,8 @@ def ipcc_single_sheet(raw):
 
     factor = norm.ppf(0.95)  # Factor for estimating sigma
     df['sigma'] = (df['90%_high'] - df['median']) / factor
+
+    df['year'] = pd.to_numeric(df['year'])
     return df
 
 
