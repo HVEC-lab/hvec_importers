@@ -20,7 +20,7 @@ from hvec_importers.psmsl import psmsl
     ]
 )
 def test_connections(key):
-    res = requests.get(psmsl.url[key])
+    res = requests.get(psmsl.url[key], timeout = 10)
     assert res.ok
 
 
