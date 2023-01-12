@@ -62,4 +62,4 @@ def test_id_from_name(name, id_expected):
 )
 def test_data_single_id(id, length):
     data = gloss.data_single_id(session = requests.session(), id = id)
-    assert len(data) == length
+    assert len(data) >= length

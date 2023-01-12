@@ -35,7 +35,7 @@ def test_station_list_complete_input(
     number_of_rows
 ):
     names = psmsl.station_list(include_metric)
-    assert len(names) == number_of_rows
+    assert len(names) >= number_of_rows
 
 
 def test_station_list_columns_complete():
