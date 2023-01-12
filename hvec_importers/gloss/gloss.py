@@ -81,7 +81,7 @@ def data_single_id(id, session, type = 'fast_delivery', drop_current_year = True
     # Errors and warnings
     assert type in ['research_quality', 'fast_delivery'], ('type should be research_quality'
                                                         '    or fast_delivery')
-    assert isinstance(id, int), 'id should be integer'
+    assert id.is_integer(), 'id should be integer'
 
     if type == 'fast_delivery':
         warnings.warn('Last few years are not research quality!')
