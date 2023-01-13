@@ -30,4 +30,4 @@ def id_from_name(StationLister, name, **kwargs):
         return
     #TODO find better solution
     id = selected.reset_index()['id'].squeeze()
-    return id
+    return id.item()  # Ensure native Python integer

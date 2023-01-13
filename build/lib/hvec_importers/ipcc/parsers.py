@@ -70,6 +70,10 @@ def ipcc_single_sheet(raw):
     df['sigma'] = (df['90%_high'] - df['median']) / factor
 
     df['year'] = pd.to_numeric(df['year'])
+
+    # Rates given in mm/yr. Set to SI units
+    num_cols = ['median', '90%_low', '90%_high', 'sigma']
+    df.loc[df['process'] == 'totalrates', num_cols] = df.loc[df['process'] == 'totalrates', num_cols].div(1000)
     return df
 
 
