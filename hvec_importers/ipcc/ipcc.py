@@ -61,7 +61,7 @@ def data_single_name(name):
     Get scenarios of a PSMSL station selected by name
     """
     try:
-        id = psmsl.id_from_name(name, include_metric = False).item()
+        id = psmsl.id_from_name(name, include_metric = False)
         df = data_single_id(id)
     except Exception as exc:
         raise NameError('No data found for ' + name) from exc
