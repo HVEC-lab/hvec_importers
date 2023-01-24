@@ -81,7 +81,7 @@ def data_single_id(id, session = requests.session(), type = 'fast_delivery', dro
     # Errors and warnings
     assert type in ['research_quality', 'fast_delivery'], ('type should be research_quality'
                                                         '    or fast_delivery')
-    assert isinstance(id, int), 'id should be integer'
+    #assert isinstance(id, int), 'id should be integer'
 
     if type == 'fast_delivery':
         warnings.warn('Last few years are not research quality!')
