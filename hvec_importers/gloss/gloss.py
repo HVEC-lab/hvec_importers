@@ -68,12 +68,12 @@ def id_from_name(name):
     return id
 
 
-def data_single_id(id, session, type = 'fast_delivery', drop_current_year = True):
+def data_single_id(id, session = requests.session(), type = 'fast_delivery', drop_current_year = True):
     """
     Get data of a gloss station selected by station_ID.
 
     The website foresees delivery of quality-checked data (reseach quality) or 
-    fast delivery. The difference being that the latter contains the last two years
+    fast delivery. The difference being that the latter contains the last few years
     of data.
 
     We allow selection of one of the two options with 'fast_delivery' as default.
