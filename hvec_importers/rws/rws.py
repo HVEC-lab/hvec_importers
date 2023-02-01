@@ -99,5 +99,7 @@ def data_single_name(
     selected.set_index(keys = 'Code', inplace = True, verify_integrity = False)
 
     df = df.join(selected[['Naam', 'X', 'Y']], how = 'inner')
+    if len(df) > 0:
+        df = parse.simplify_output(df)
 
     return df
