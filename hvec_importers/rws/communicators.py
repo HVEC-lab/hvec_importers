@@ -15,6 +15,7 @@ import json
 import requests
 from tqdm import tqdm
 import pandas as pd
+import time
 
 from hvec_importers.rws import helpers as hlp
 from hvec_importers.rws import parsers as parse
@@ -130,6 +131,7 @@ def get_data(location):
 
         data_present = assert_data_available(location, start_i, end_i)
         if data_present:
+            time.sleep(2)
             try:
                 raw = _get_raw_slice(location, start_i, end_i)
                 clean = parse.parse_data(raw)
