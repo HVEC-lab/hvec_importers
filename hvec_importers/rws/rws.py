@@ -9,6 +9,7 @@ HVEC-lab, 2022
 import logging
 import pandas as pd
 import dateutil
+import requests
 
 # The code is organised in thematic sub-packages
 from hvec_importers.rws import communicators as com
@@ -57,6 +58,8 @@ def data_availability(
     Output:
 
     """
+    session = requests.session()
+
     start = dateutil.parser.parse(start)
     end   = dateutil.parser.parse(end)
 
@@ -65,14 +68,16 @@ def data_availability(
 
     # A location may be stored under multiple codes; check for all
     res = selected.groupby('Code').apply(
-        lambda x: com.assert_data_available(x, start, end)).reset_index()
+        lambda x: com.assert_data_available(x, start, end, session)).reset_index()
     res.columns = ["Code", "Data_present"]
+
+    session.close()
     return res
 
 
 def data_single_name(
     name, quantity,
-    start = '18000101',
+    start = '18500101',
     end = '21001231'):
     """
     Take natural input, process it and harvest data
