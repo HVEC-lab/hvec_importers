@@ -75,3 +75,11 @@ tests/__pycache__/test_gloss.cpython-311-pytest-7.2.1.pyc
 tests/__pycache__/test_ipcc.cpython-311-pytest-7.2.1.pyc
 tests/__pycache__/test_mvb.cpython-311-pytest-7.2.1.pyc
 tests/__pycache__/test_psmsl.cpython-311-pytest-7.2.1.pyc
+tests/__pycache__/test_rws.cpython-311-pytest-7.2.1.pyc
+hvec_importers/rws/__pycache__/rws.cpython-311.pyc
+hvec_importers/rws/__pycache__/__init__.cpython-311.pyc
+hvec_importers/rws/__pycache__/_communicators.cpython-311.pyc
+hvec_importers/rws/__pycache__/_parsers.cpython-311.pyc
+hvec_importers/rws/__pycache__/communicators.cpython-311.pyc
+hvec_importers/rws/__pycache__/parsers.cpython-311.pyc
+hvec_importers/rws/__pycache__/helpers.cpython-311.pyc

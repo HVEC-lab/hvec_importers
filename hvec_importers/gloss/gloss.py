@@ -85,7 +85,7 @@ def data_single_id(id, session = requests.session(), type = 'fast_delivery', dro
     assert isinstance(id, (int, np.integer)), 'id should be integer'
 
     if type == 'fast_delivery':
-        warnings.warn('Last few years are not research quality!')
+        logging.warning('Last few years are not research quality!')
 
     # Assemble url
     base = url[type]
