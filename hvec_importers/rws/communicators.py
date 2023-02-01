@@ -27,7 +27,7 @@ ENDPOINTS_PATH = pathlib.Path(__file__).with_name("endpoints.json")
 with ENDPOINTS_PATH.open() as f:
     ENDPOINTS = json.load(f)
 
-TIMEOUT = 30
+TIMEOUT = 60
 
 class NoDataException(ValueError):
     pass
