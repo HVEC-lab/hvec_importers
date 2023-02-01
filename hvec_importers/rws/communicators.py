@@ -26,6 +26,7 @@ ENDPOINTS_PATH = pathlib.Path(__file__).with_name("endpoints.json")
 with ENDPOINTS_PATH.open() as f:
     ENDPOINTS = json.load(f)
 
+TIMEOUT = 30
 
 class NoDataException(ValueError):
     pass
@@ -70,7 +71,7 @@ def assert_data_available(location, start_i, end_i):
     endpoint = ENDPOINTS["check_observations_available"]
 
     request = hlp.create_availability_request(location, start_i, end_i)
-    resp = requests.post(endpoint["url"], json = request, timeout = 10)
+    resp = requests.post(endpoint["url"], json = request, timeout = TIMEOUT)
 
     result = resp.json()
     if not result["Succesvol"]:
@@ -97,7 +98,7 @@ def _get_raw_slice(location, start_i, end_i):
     try:
         logging.debug("requesting:  {}".format(request))
 
-        resp = requests.post(endpoint["url"], json=request, timeout = 10)
+        resp = requests.post(endpoint["url"], json=request, timeout = TIMEOUT)
         result = resp.json()
 
         if not result["Succesvol"]:
