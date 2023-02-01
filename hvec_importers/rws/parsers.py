@@ -13,7 +13,7 @@ def parse_station_list(raw):
     Take the imported raw station list and parse to
     dataframe
     """
-    
+
     df_locations = pd.DataFrame(raw["LocatieLijst"])
 
     df_metadata = pd.json_normalize(raw["AquoMetadataLijst"])
@@ -36,10 +36,10 @@ def parse_data(raw):
     """
     Parse raw waterinfo data to dataframe. SiggyF is gratefully acknowledged
     for all this hard work.
-    
+
     Args:
         raw, json: raw waterinfo output
-        
+
     Out:
         df, dataframe: flattened data
     """
@@ -91,4 +91,24 @@ def parse_data(raw):
         logging.exception(
             "Cannot add time variable t because variable Tijdstip is not found"
         )
+    return df
+
+
+def simplify_output(df):
+    """
+    Takes a dataframe resulting from RWS data import and shortens the 
+    most used columns
+    """
+    df.rename(
+        columns = {
+            'Eenheid.code': 'Eenheid',
+            'Grootheid.code': 'Grootheid',
+            'Meetwaarde.Waarde_Numeriek': 'Waarde',
+            'WaarnemingMetadata.StatuswaardeLijst': 'Status',
+            'Parameter_Wat_Omschrijving': 'Omschrijving',
+        }, inplace = True)
+
+    df = df[
+        ['Naam', 't', 'Waarde', 'Eenheid', 'Status', 'Grootheid', 'Omschrijving']
+    ]
     return df
