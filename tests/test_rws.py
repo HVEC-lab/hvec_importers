@@ -80,3 +80,12 @@ def test_data_single_name(name, quantity, start, end):
     """
     df = rws.data_single_name(name, quantity, start, end)
     assert len(df.columns) > 1
+
+@pyt.mark.parametrize(
+    "name, quantity",
+    [
+        ('Yerseke', 'WATHTE')
+        ])
+def test_data_single_full_download(name, quantity):
+    df = rws.data_single_name(name, quantity)
+    assert len(df.columns) > 1
