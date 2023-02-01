@@ -42,7 +42,8 @@ def test_data_single_id(id, expected_length):
     [
         ("Delfzijl", 784),
         ("Warnemunde 2", 784),
-        ("LIVERPOOL G", 784)
+        ("LIVERPOOL G", 784),
+        ("Vlissingen", 784)
     ]
 )
 def test_single_name(name, expected_length):

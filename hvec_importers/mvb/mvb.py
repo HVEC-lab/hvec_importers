@@ -48,8 +48,8 @@ from tqdm import tqdm
 #Routine for ping request
 def ping(token="") :
     """Sends ping request to meetnet vlaamse banken API.
-    
-    ping returns the login status of the provided token. Tokens expire after 
+
+    ping returns the login status of the provided token. Tokens expire after
     3600s. A new login is then required.
     """
     
