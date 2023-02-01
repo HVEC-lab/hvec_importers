@@ -94,10 +94,4 @@ def data_single_name(
     df.reset_index(inplace = True)
     df.drop(columns = 'level_1', inplace = True)
 
-    # Add metadata
-    df.set_index(keys = 'Code', inplace = True, verify_integrity = False)
-    selected.set_index(keys = 'Code', inplace = True, verify_integrity = False)
-
-    df = df.join(selected[['Naam', 'X', 'Y']], how = 'inner')
-
     return df

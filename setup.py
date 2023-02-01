@@ -41,5 +41,8 @@ setup(
                       'tqdm',
                       'lxml',
                       'openpyxl'],
+    package_data = {'': ['endpoints.json']},
+    include_package_data = True,
     packages=find_packages(exclude=[]),
+    
 )
