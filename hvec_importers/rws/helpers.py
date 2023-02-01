@@ -135,6 +135,6 @@ def date_series(start, end):
 
     starts = date_range[:-1]
     ends = date_range[1:]
-    
+
     result = list(zip(starts, ends))
     return result

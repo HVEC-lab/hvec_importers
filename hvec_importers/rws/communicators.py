@@ -56,7 +56,7 @@ def station_list_raw():
     return result
 
 
-def assert_data_available(location, start_i, end_i):
+def assert_data_available(location, start_i, end_i, session):
     """
     Check data availability on the waterinfo site.
 
@@ -72,7 +72,7 @@ def assert_data_available(location, start_i, end_i):
     endpoint = ENDPOINTS["check_observations_available"]
 
     request = hlp.create_availability_request(location, start_i, end_i)
-    resp = requests.post(endpoint["url"], json = request, timeout = TIMEOUT)
+    resp = session.post(endpoint["url"], json = request, timeout = TIMEOUT)
 
     result = resp.json()
     if not result["Succesvol"]:
@@ -82,15 +82,16 @@ def assert_data_available(location, start_i, end_i):
     return result['WaarnemingenAanwezig'] == 'true'
 
 
-def _get_raw_slice(location, start_i, end_i):
+def _get_raw_slice(location, start_i, end_i, session):
     """
     Get raw data from the waterinfo site for a given slice
-    
+
     Args:
         location, dataframe: location properties, quantity and time period
             The method expects a single entity in the dataframe, so use
             pd.groupby in the call to this method.
         start_i, end_i: start and end of interval
+        session: request session
     """
     endpoint = ENDPOINTS["collect_observations"]
 
@@ -99,7 +100,7 @@ def _get_raw_slice(location, start_i, end_i):
     try:
         logging.debug("requesting:  {}".format(request))
 
-        resp = requests.post(endpoint["url"], json=request, timeout = TIMEOUT)
+        resp = session.post(endpoint["url"], json=request, timeout = TIMEOUT)
         result = resp.json()
 
         if not result["Succesvol"]:
@@ -117,23 +118,26 @@ def get_data(location):
     """
     Slice the requested time interval. Download data in slices, parse to dataframe
     and merge.
-    
+
     Args:
         location, dataframe: location properties, quantity and time period
             The method expects a single entity in the dataframe, so use
             pd.groupby in the call to this method.
     """
+    # Create re-usable session
+    session = requests.session()
+
     date_range = hlp.date_series(location['start'].squeeze(), location['end'].squeeze())
 
     df = pd.DataFrame() # Empty dataframe to store results
 
     for (start_i, end_i) in tqdm(date_range):
 
-        data_present = assert_data_available(location, start_i, end_i)
+        data_present = assert_data_available(location, start_i, end_i, session)
         if data_present:
             time.sleep(2)
             try:
-                raw = _get_raw_slice(location, start_i, end_i)
+                raw = _get_raw_slice(location, start_i, end_i, session)
                 clean = parse.parse_data(raw)
                 df = pd.concat([df, clean])
 
