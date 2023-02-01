@@ -38,6 +38,7 @@ import numpy as np
 import requests
 import json
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 #from datetime import datetime
 
 #Default values:
@@ -47,8 +48,8 @@ import matplotlib.pyplot as plt
 #Routine for ping request
 def ping(token="") :
     """Sends ping request to meetnet vlaamse banken API.
-    
-    ping returns the login status of the provided token. Tokens expire after 
+
+    ping returns the login status of the provided token. Tokens expire after
     3600s. A new login is then required.
     """
     
@@ -231,7 +232,7 @@ def get_data(token,stationparameter,tstart,tstop):
     v=np.array([])
     t=np.array([], dtype="datetime64[s]")
     
-    for i in range(len(t_start)):
+    for i in tqdm(range(len(t_start))):
         if i is len(t_start)-1:
             t_stop = np.datetime64(tstop)
         else:

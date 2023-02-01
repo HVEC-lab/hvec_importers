@@ -92,3 +92,21 @@ def parse_data(raw):
             "Cannot add time variable t because variable Tijdstip is not found"
         )
     return df
+
+
+def add_meta(location, data):
+    """
+    Add some metadata to data table
+    
+    Args:
+        location, data: dataframes
+    
+    Output:
+        data augmented with metadata
+    """
+
+    for name in ['Naam', 'X', 'Y']:
+        #TODO: loose the for-loop
+        data[name] = location[name]
+
+    return data

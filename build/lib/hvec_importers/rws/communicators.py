@@ -137,4 +137,6 @@ def get_data(location):
             except NoDataException:
                 logging.debug("Data availability is checked beforehand, so this should not have happened")
                 continue
+    if len(df) > 0:
+        df = parse.add_meta(location, df)
     return df
