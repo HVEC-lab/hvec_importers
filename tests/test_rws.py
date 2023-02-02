@@ -16,6 +16,7 @@ import_tests =  [
         ('Den Helder', 'WATHTE', '1972-1-1', '31-12-1975'),
         ('Lobith', 'Q', '3-2-1925', '10-10-1928'),
         ('Vlissingen', 'WATHTE', '1953-01-01', '1953-02-28'),
+        ('Harlingen', 'WATHTE', '2023-01-01', '2023-12-31'),
         ('Yerseke', 'WATHTE', '1953-01-29', '1953-02-03')
         ]
 
@@ -79,13 +80,4 @@ def test_data_single_name(name, quantity, start, end):
     Test data import RWS Waterinfo
     """
     df = rws.data_single_name(name, quantity, start, end)
-    assert len(df.columns) > 1
-
-@pyt.mark.parametrize(
-    "name, quantity",
-    [
-        ('Yerseke', 'WATHTE')
-        ])
-def test_data_single_full_download(name, quantity):
-    df = rws.data_single_name(name, quantity)
     assert len(df.columns) > 1

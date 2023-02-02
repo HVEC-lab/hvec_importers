@@ -32,6 +32,31 @@ def parse_station_list(raw):
     return merged.set_index("Code")
 
 
+def _reduce_table(df):
+    """
+    Drop excess columns and reduce sample frequency
+    """
+    df = df[
+        [
+            'Tijdstip',
+            'Eenheid.code',
+            'Grootheid.code',
+            'Meetwaarde.Waarde_Numeriek',
+            'WaarnemingMetadata.StatuswaardeLijst',
+            'Parameter_Wat_Omschrijving'
+            ]
+    ]
+
+    # Check for duplicates, keeping checked values if available
+    # Sorting ensures that unchecked values are always the second
+    df.sort_values(by = 'WaarnemingMetadata.StatuswaardeLijst', inplace = True)
+
+    # Due to sorting, unchecked values are the duplicates, if present
+    df.drop_duplicates(subset = 'Tijdstip', inplace = True)
+    df = df.loc[df['Tijdstip'].dt.minute%10 == 0]  # Keep 10 minute values only
+    return df
+
+
 def parse_data(raw):
     """
     Parse raw waterinfo data to dataframe. SiggyF is gratefully acknowledged
@@ -80,17 +105,16 @@ def parse_data(raw):
                     new_row[key] = val
             rows.append(new_row)
     # normalize and return
-    df = pd.json_normalize(rows)
+    df = pd.json_normalize(rows)    
+    
     # set NA value
     if "Meetwaarde.Waarde_Numeriek" in df.columns:
         df[df["Meetwaarde.Waarde_Numeriek"] == 999999999] = None
 
-    try:
-        df["t"] = pd.to_datetime(df["Tijdstip"])
-    except KeyError:
-        logging.exception(
-            "Cannot add time variable t because variable Tijdstip is not found"
-        )
+    df['Tijdstip'] = pd.to_datetime(df['Tijdstip'])
+
+    df = _reduce_table(df)
+
     return df
 
 
@@ -109,6 +133,6 @@ def simplify_output(df):
         }, inplace = True)
 
     df = df[
-        ['Naam', 't', 'Waarde', 'Eenheid', 'Status', 'Grootheid', 'Omschrijving']
+        ['Naam', 'Tijdstip', 'Waarde', 'Eenheid', 'Status', 'Grootheid', 'Omschrijving']
     ]
     return df
