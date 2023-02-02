@@ -125,6 +125,10 @@ def date_series(start, end):
     start = dateutil.parser.parse(start)
     end =   dateutil.parser.parse(end)
 
+    # Prevent looking for data after today
+    end = min(end, dt.datetime.today())
+
+
     # Roughly to the number of years
     # Minimum two periods to prevent exception of one-element list
     # Accept slight increase of internet-traffic in case of very small requests
@@ -135,6 +139,6 @@ def date_series(start, end):
 
     starts = date_range[:-1]
     ends = date_range[1:]
-    
+
     result = list(zip(starts, ends))
     return result

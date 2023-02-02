@@ -3,12 +3,19 @@ Importers for Rijkswaterstaat Waterinfo.
 
 Sub-package of hvec_importers.
 
+Data is imported from the website waterinfo.rws.nl through the api specified
+for it. The input to the website consists of complex json-formatted data. The
+website is sensitive to missing or incorrectly formatted fields.
+
+This module provides three functions wich assume user-friendly input.
+
 HVEC-lab, 2022
 """
 
 import logging
 import pandas as pd
 import dateutil
+import requests
 
 # The code is organised in thematic sub-packages
 from hvec_importers.rws import communicators as com
@@ -43,8 +50,8 @@ def station_list():
 
 def data_availability(
     name, quantity,
-    start = '18000101',
-    end   = '21001231'):
+    start = '1800-01-01',
+    end   = '2100-12-31'):
     """
     Show data availability using human input
 
@@ -57,6 +64,8 @@ def data_availability(
     Output:
 
     """
+    session = requests.session()
+
     start = dateutil.parser.parse(start)
     end   = dateutil.parser.parse(end)
 
@@ -65,15 +74,17 @@ def data_availability(
 
     # A location may be stored under multiple codes; check for all
     res = selected.groupby('Code').apply(
-        lambda x: com.assert_data_available(x, start, end)).reset_index()
+        lambda x: com.assert_data_available(x, start, end, session)).reset_index()
     res.columns = ["Code", "Data_present"]
+
+    session.close()
     return res
 
 
 def data_single_name(
     name, quantity,
-    start = '18000101',
-    end = '21001231'):
+    start = '1850-01-01',
+    end = '2100-12-31'):
     """
     Take natural input, process it and harvest data
 
@@ -93,5 +104,13 @@ def data_single_name(
     # Drop the resulting multi-index
     df.reset_index(inplace = True)
     df.drop(columns = 'level_1', inplace = True)
+
+    # Add metadata
+    df.set_index(keys = 'Code', inplace = True, verify_integrity = False)
+    selected.set_index(keys = 'Code', inplace = True, verify_integrity = False)
+
+    df = df.join(selected[['Naam', 'X', 'Y']], how = 'inner')
+    if len(df) > 0:
+        df = parse.simplify_output(df)
 
     return df

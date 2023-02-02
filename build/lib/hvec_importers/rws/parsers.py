@@ -13,7 +13,7 @@ def parse_station_list(raw):
     Take the imported raw station list and parse to
     dataframe
     """
-    
+
     df_locations = pd.DataFrame(raw["LocatieLijst"])
 
     df_metadata = pd.json_normalize(raw["AquoMetadataLijst"])
@@ -32,14 +32,39 @@ def parse_station_list(raw):
     return merged.set_index("Code")
 
 
+def _reduce_table(df):
+    """
+    Drop excess columns and reduce sample frequency
+    """
+    df = df[
+        [
+            'Tijdstip',
+            'Eenheid.code',
+            'Grootheid.code',
+            'Meetwaarde.Waarde_Numeriek',
+            'WaarnemingMetadata.StatuswaardeLijst',
+            'Parameter_Wat_Omschrijving'
+            ]
+    ]
+
+    # Check for duplicates, keeping checked values if available
+    # Sorting ensures that unchecked values are always the second
+    df.sort_values(by = 'WaarnemingMetadata.StatuswaardeLijst', inplace = True)
+
+    # Due to sorting, unchecked values are the duplicates, if present
+    df.drop_duplicates(subset = 'Tijdstip', inplace = True)
+    df = df.loc[df['Tijdstip'].dt.minute%10 == 0]  # Keep 10 minute values only
+    return df
+
+
 def parse_data(raw):
     """
     Parse raw waterinfo data to dataframe. SiggyF is gratefully acknowledged
     for all this hard work.
-    
+
     Args:
         raw, json: raw waterinfo output
-        
+
     Out:
         df, dataframe: flattened data
     """
@@ -80,33 +105,34 @@ def parse_data(raw):
                     new_row[key] = val
             rows.append(new_row)
     # normalize and return
-    df = pd.json_normalize(rows)
+    df = pd.json_normalize(rows)    
+    
     # set NA value
     if "Meetwaarde.Waarde_Numeriek" in df.columns:
         df[df["Meetwaarde.Waarde_Numeriek"] == 999999999] = None
 
-    try:
-        df["t"] = pd.to_datetime(df["Tijdstip"])
-    except KeyError:
-        logging.exception(
-            "Cannot add time variable t because variable Tijdstip is not found"
-        )
+    df['Tijdstip'] = pd.to_datetime(df['Tijdstip'])
+
+    df = _reduce_table(df)
+
     return df
 
 
-def add_meta(location, data):
+def simplify_output(df):
     """
-    Add some metadata to data table
-    
-    Args:
-        location, data: dataframes
-    
-    Output:
-        data augmented with metadata
+    Takes a dataframe resulting from RWS data import and shortens the 
+    most used columns
     """
+    df.rename(
+        columns = {
+            'Eenheid.code': 'Eenheid',
+            'Grootheid.code': 'Grootheid',
+            'Meetwaarde.Waarde_Numeriek': 'Waarde',
+            'WaarnemingMetadata.StatuswaardeLijst': 'Status',
+            'Parameter_Wat_Omschrijving': 'Omschrijving',
+        }, inplace = True)
 
-    for name in ['Naam', 'X', 'Y']:
-        #TODO: loose the for-loop
-        data[name] = location[name]
-
-    return data
+    df = df[
+        ['Naam', 'Tijdstip', 'Waarde', 'Eenheid', 'Status', 'Grootheid', 'Omschrijving']
+    ]
+    return df
