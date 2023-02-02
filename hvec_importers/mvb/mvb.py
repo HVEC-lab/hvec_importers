@@ -15,16 +15,16 @@ The package contains 5 methods:
     catalog: to fetch the catalog of measurement locations and parameters.
     table: visual indication of available locations and parameters.
     get_data: to download timeseries.
-    
-Typically you first need to import meetnetvlaamsebanken.py, then login, 
-optionally fetch the catalog to determine Loction+Parameter ID's and finally 
+
+Typically you first need to import meetnetvlaamsebanken.py, then login,
+optionally fetch the catalog to determine Loction+Parameter ID's and finally
 perform one or more get_data requests.
 
 Example:
     import meetnetvlaamsebanken as mvb
     token = mvb.login('<username>','<password>')
     t,v = mvb.get_data(token,'BVHGHA','2020-01-01','2022-02-01')
-    
+
 Created on Thu Aug 22 12:52:02 2019
 
 @author: LWM Roest

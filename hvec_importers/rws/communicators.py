@@ -135,7 +135,7 @@ def get_data(location):
 
         data_present = assert_data_available(location, start_i, end_i, session)
         if data_present:
-            time.sleep(2)
+            #time.sleep(2)
             try:
                 raw = _get_raw_slice(location, start_i, end_i, session)
                 clean = parse.parse_data(raw)
@@ -144,4 +144,6 @@ def get_data(location):
             except NoDataException:
                 logging.debug("Data availability is checked beforehand, so this should not have happened")
                 continue
+
+    session.close()
     return df

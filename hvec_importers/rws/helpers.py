@@ -125,11 +125,15 @@ def date_series(start, end):
     start = dateutil.parser.parse(start)
     end =   dateutil.parser.parse(end)
 
+    # Prevent looking for data after today
+    end = min(end, dt.datetime.today())
+
+
     # Roughly to the number of years
     # Minimum two periods to prevent exception of one-element list
     # Accept slight increase of internet-traffic in case of very small requests
     # favoring simplicity of code
-    periods = (((end - start).days) // 30) + 2
+    periods = (((end - start).days) // 365) + 2
 
     date_range = pd.date_range(start, end, periods = periods).to_pydatetime()
 
