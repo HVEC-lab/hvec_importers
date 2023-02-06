@@ -17,7 +17,7 @@ import_tests =  [
         ('Lobith', 'Q', '3-2-1925', '10-10-1928'),
         ('Vlissingen', 'WATHTE', '1953-01-01', '1953-02-28'),
         ('Harlingen', 'WATHTE', '2023-01-01', '2023-12-31'),
-        ('Yerseke', 'WATHTE', '1970-01-01', '1979-12-31')
+        ('Roompot buiten', 'WATHTE', '1987-01-01', '1987-12-31')
         ]
 
 @pyt.mark.parametrize(
@@ -35,13 +35,12 @@ def test_connections(endpoint):
     """
     Testing connections
     """
-    ENDPOINTS = com.ENDPOINTS
     endpoint = com.ENDPOINTS[endpoint]
 
     url = endpoint['url']
     req_txt = endpoint['request']
 
-    res = requests.post(url, json = req_txt)
+    res = requests.post(url, json = req_txt, timeout = 60)
 
     assert res.ok
 
