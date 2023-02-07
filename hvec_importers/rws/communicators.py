@@ -46,12 +46,12 @@ def station_list_raw():
     logging.debug("requesting: {}".format(msg))
 
     resp = requests.post(endpoint["url"], json=endpoint["request"], timeout = TIMEOUT)
-    
+
     if not resp.ok:
         raise IOError("Failed to request {}: {}".format(msg, resp.text))
-    
+
     result = resp.json()
-    
+
     if not result["Succesvol"]:
         logging.exception(str(result))
         raise ValueError(result.get("Foutmelding", "No error returned"))

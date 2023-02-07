@@ -13,7 +13,6 @@ def parse_station_list(raw):
     Take the imported raw station list and parse to
     dataframe
     """
-
     df_locations = pd.DataFrame(raw["LocatieLijst"])
 
     df_metadata = pd.json_normalize(raw["AquoMetadataLijst"])
@@ -59,8 +58,13 @@ def _reduce_table(df):
 
 def parse_data(raw):
     """
-    Parse raw waterinfo data to dataframe. SiggyF is gratefully acknowledged
-    for all this hard work.
+    Parse raw waterinfo data to dataframe.
+
+    SiggyF is gratefully acknowledged for his initial version. However,
+    his nested for-loops were very slow and performance heavily downgraded
+    with increasing number of rows.
+
+    So an alternative was implemented
 
     Args:
         raw, json: raw waterinfo output
@@ -68,48 +72,70 @@ def parse_data(raw):
     Out:
         df, dataframe: flattened data
     """
-    #TODO: skip unnecessary columns
 
-    assert "WaarnemingenLijst" in raw
+    # Put raw in DataFrame
+    df = pd.json_normalize(
+        data = raw['WaarnemingenLijst'],
+        record_path = 'MetingenLijst',
+        meta = ['Locatie', 'AquoMetadata'])
 
-    # assert len(raw['WaarnemingenLijst']) == 1
-    # flatten the datastructure
-    rows = []
-    for waarneming in raw["WaarnemingenLijst"]:
-        for row in waarneming["MetingenLijst"]:
-            # metadata is a list of 1 value, flatten it
-            new_row = {}
-            for key, value in row["WaarnemingMetadata"].items():
-                new_key = "WaarnemingMetadata." + key
-                new_val = value[0] if len(value) == 1 else value
-                new_row[new_key] = new_val
+    # Keep only the relevant columns
+    keep = [
+        'Tijdstip',
+        'Meetwaarde.Waarde_Numeriek',
+        'WaarnemingMetadata.StatuswaardeLijst',
+        'Locatie',
+        'AquoMetadata'
+        ]
+    df = df[keep]
 
-            # add remaining data
-            for key, val in row.items():
-                if key == "WaarnemingMetadata":
-                    continue
-                new_row[key] = val
+    # The location column (Locatie) is a column of dictionaries
+    # Exploding the column to get the location dataframe
+    LocatieLijst = df['Locatie'].apply(pd.Series)
+    LocatieLijst.drop(columns = 'Locatie_MessageID', inplace = True)
 
-            # add metadata
-            for key, val in list(waarneming["AquoMetadata"].items()):
-                if isinstance(val, dict) and "Code" in val and "Omschrijving" in val:
-                    # some values have a code/omschrijving pair, flatten them
-                    new_key = key + ".code"
-                    new_val = val["Code"]
-                    new_row[new_key] = new_val
+    # ... and add to MetingenLijst while dropping the original column
+    df = pd.concat([df.drop(columns = 'Locatie'), LocatieLijst], axis = 1)
 
-                    new_key = key + ".Omschrijving"
-                    new_val = val["Omschrijving"]
-                    new_row[new_key] = new_val
-                else:
-                    new_row[key] = val
-            rows.append(new_row)
-    # normalize and return
-    df = pd.json_normalize(rows)    
+    # Process the AquoMetadata in a similar way
+    # But do not bother with unused columns
+    meta = df['AquoMetadata'].apply(pd.Series)
+    keep = [
+        'Parameter_Wat_Omschrijving',
+        'Eenheid',
+        'MeetApparaat'
+    ]
+    meta = meta[keep]
+
+    # Extract relevant info from Eenheid and MeetApparaat and add
+    tmp = meta['Eenheid'].apply(pd.Series)['Code']
+    meta['Eenheid'] = tmp # Reuse column; replace values
+
+    tmp = meta['MeetApparaat'].apply(pd.Series)['Omschrijving']
+    meta['MeetApparaat'] = tmp
+
+    df = pd.concat(
+        [df.drop(columns = 'AquoMetadata'), meta], axis = 1)
+
+    # Shorten column names
+    df.rename(
+        columns = {
+            'Meetwaarde.Waarde_Numeriek': 'waarde',
+            'Parameter_Wat_Omschrijving': 'Parameter_Omschrijving',
+            'WaarnemingMetadata.StatuswaardeLijst': 'Status'
+        }, inplace = True
+    )
+
+
+
+
     
-    # set NA value
-    if "Meetwaarde.Waarde_Numeriek" in df.columns:
-        df[df["Meetwaarde.Waarde_Numeriek"] == 999999999] = None
+    
+
+    if "waarde" in df.columns:
+        df[df["waarde"] == 999999999] = None
+
+    
 
     df['Tijdstip'] = pd.to_datetime(df['Tijdstip'])
 
