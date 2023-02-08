@@ -31,38 +31,14 @@ def parse_station_list(raw):
     return merged.set_index("Code")
 
 
-def _reduce_table(df):
-    """
-    Drop excess columns and reduce sample frequency
-    """
-    df = df[
-        [
-            'Tijdstip',
-            'Eenheid.code',
-            'Grootheid.code',
-            'Meetwaarde.Waarde_Numeriek',
-            'WaarnemingMetadata.StatuswaardeLijst',
-            'Parameter_Wat_Omschrijving'
-            ]
-    ]
-
-    # Check for duplicates, keeping checked values if available
-    # Sorting ensures that unchecked values are always the second
-    df.sort_values(by = 'WaarnemingMetadata.StatuswaardeLijst', inplace = True)
-
-    # Due to sorting, unchecked values are the duplicates, if present
-    df.drop_duplicates(subset = 'Tijdstip', inplace = True)
-    df = df.loc[df['Tijdstip'].dt.minute%10 == 0]  # Keep 10 minute values only
-    return df
-
-
 def parse_data(raw):
     """
     Parse raw waterinfo data to dataframe.
 
     SiggyF is gratefully acknowledged for his initial version. However,
     his nested for-loops were very slow and performance heavily downgraded
-    with increasing number of rows.
+    with increasing number of rows, preventing the downloading of large
+    chunks of data.
 
     So an alternative was implemented
 
@@ -90,9 +66,8 @@ def parse_data(raw):
     df = df[keep]
 
     # The location column (Locatie) is a column of dictionaries
-    # Exploding the column to get the location dataframe
     LocatieLijst = df['Locatie'].apply(pd.Series)
-    LocatieLijst.drop(columns = 'Locatie_MessageID', inplace = True)
+    LocatieLijst.drop(columns = ['Locatie_MessageID', 'Code'], inplace = True)
 
     # ... and add to MetingenLijst while dropping the original column
     df = pd.concat([df.drop(columns = 'Locatie'), LocatieLijst], axis = 1)
@@ -103,7 +78,7 @@ def parse_data(raw):
     keep = [
         'Parameter_Wat_Omschrijving',
         'Eenheid',
-        'MeetApparaat'
+                'MeetApparaat'
     ]
     meta = meta[keep]
 
@@ -126,39 +101,8 @@ def parse_data(raw):
         }, inplace = True
     )
 
-
-
-
-    
-    
-
+    # Set missing values to None
     if "waarde" in df.columns:
         df[df["waarde"] == 999999999] = None
 
-    
-
-    df['Tijdstip'] = pd.to_datetime(df['Tijdstip'])
-
-    df = _reduce_table(df)
-
-    return df
-
-
-def simplify_output(df):
-    """
-    Takes a dataframe resulting from RWS data import and shortens the 
-    most used columns
-    """
-    df.rename(
-        columns = {
-            'Eenheid.code': 'Eenheid',
-            'Grootheid.code': 'Grootheid',
-            'Meetwaarde.Waarde_Numeriek': 'Waarde',
-            'WaarnemingMetadata.StatuswaardeLijst': 'Status',
-            'Parameter_Wat_Omschrijving': 'Omschrijving',
-        }, inplace = True)
-
-    df = df[
-        ['Naam', 'Tijdstip', 'Waarde', 'Eenheid', 'Status', 'Grootheid', 'Omschrijving']
-    ]
     return df

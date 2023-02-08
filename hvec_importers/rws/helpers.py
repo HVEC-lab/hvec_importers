@@ -121,7 +121,8 @@ def date_series(start, end):
     """
     Split the daterange in intervals described in pairs
     """
-    #TODO: deal with edge case of short periods
+    #TODO: make dependent on number of datapoints in interval. 
+    # Idea: recursive function splitting range in half if to large number of data
     start = dateutil.parser.parse(start)
     end =   dateutil.parser.parse(end)
 
@@ -133,7 +134,7 @@ def date_series(start, end):
     # Minimum two periods to prevent exception of one-element list
     # Accept slight increase of internet-traffic in case of very small requests
     # favoring simplicity of code
-    periods = (((end - start).days) // 365) + 2
+    periods = (((end - start).days) // 720) + 2
 
     date_range = pd.date_range(start, end, periods = periods).to_pydatetime()
 
