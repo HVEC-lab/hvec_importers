@@ -17,7 +17,7 @@ import_tests =  [
         ('Lobith', 'Q', '3-2-1925', '10-10-1928'),
         ('Vlissingen', 'WATHTE', '1953-01-01', '1953-02-28'),
         ('Harlingen', 'WATHTE', '2023-01-01', '2023-12-31'),
-        ('Roompot buiten', 'WATHTE', '1987-01-01', '1987-12-31')
+        ('Yerseke', 'WATHTE', '1988-01-01', '1989-12-31')
         ]
 
 @pyt.mark.parametrize(
@@ -44,12 +44,12 @@ def test_connections(endpoint):
 
     assert res.ok
 
-
-def test_station_list():
+@pyt.mark.parametrize("renew", [False, True])
+def test_station_list(renew):
     """
     Test import of station catalogue
     """
-    stations = rws.station_list()
+    stations = rws.station_list(renew)
     assert len(stations.columns) > 1
     assert len(stations) > 15000
 
