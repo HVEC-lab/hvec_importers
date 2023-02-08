@@ -6,7 +6,8 @@ Sub-package of hvec_importers.
 
 Developed by HVEC-lab, 2023
 
-Based on the tool rws-ddlpy by SiggyF
+Based on the tool rws-ddlpy by SiggyF. Refactored, optimised parsers and
+different philosophy of interfacing with the user.
 """
 
 import logging
@@ -46,12 +47,12 @@ def station_list_raw():
     logging.debug("requesting: {}".format(msg))
 
     resp = requests.post(endpoint["url"], json=endpoint["request"], timeout = TIMEOUT)
-    
+
     if not resp.ok:
         raise IOError("Failed to request {}: {}".format(msg, resp.text))
-    
+
     result = resp.json()
-    
+
     if not result["Succesvol"]:
         logging.exception(str(result))
         raise ValueError(result.get("Foutmelding", "No error returned"))
@@ -127,6 +128,8 @@ def get_data(location):
             The method expects a single entity in the dataframe, so use
             pd.groupby in the call to this method.
     """
+    # TODO: investigate further optimisation by joining the jsons and parse to dataframe only once
+    
     # Create re-usable session
     session = requests.Session()
 
@@ -146,7 +149,9 @@ def get_data(location):
             except NoDataException:
                 logging.debug("Data availability is checked beforehand, so this should not have happened")
                 continue
-            time.sleep(2) # Prevent overloading website
+            #time.sleep(2) # Prevent overloading website
 
+    # Final house keeping; close session
     session.close()
+
     return df
