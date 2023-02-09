@@ -72,7 +72,15 @@ def parse_data(raw):
         'AquoMetadata'
         ]
     df = df[keep]
+    return df
 
+
+def format_data(df):
+    """
+    Final formatting for human reading.
+
+    Placing inside the parser slows down the code.
+    """
     # The location column (Locatie) is a column of dictionaries
     LocatieLijst = df['Locatie'].apply(pd.Series)
     LocatieLijst.drop(columns = ['Locatie_MessageID', 'Code'], inplace = True)

@@ -13,6 +13,7 @@ different philosophy of interfacing with the user.
 import logging
 import json
 import requests
+import dateutil
 from tqdm import tqdm
 import pandas as pd
 import time
@@ -116,17 +117,22 @@ def get_data(location):
             The method expects a single entity in the dataframe, so use
             pd.groupby in the call to this method.
     """
-    # TODO: investigate further optimisation by joining the jsons and parse to dataframe only once
-    
+    df = pd.DataFrame() # Empty dataframe to store results
+
     # Create re-usable session
     session = requests.Session()
 
+    # Check if there is any data under the current code
+    start = dateutil.parser.parse(location['start'].squeeze())
+    end =   dateutil.parser.parse(location['end'].squeeze())
+    empty_code = not(assert_data_available(location, start, end, session))
+    if empty_code: # Break early if no data is present
+        session.close()
+        return df
+
     date_range = hlp.date_series(location['start'].squeeze(), location['end'].squeeze())
 
-    df = pd.DataFrame() # Empty dataframe to store results
-
     for (start_i, end_i) in tqdm(date_range):
-
         time.sleep(2)
         data_present = assert_data_available(location, start_i, end_i, session)
         if data_present:
@@ -139,7 +145,8 @@ def get_data(location):
                 logging.debug("Data availability is checked beforehand, so this should not have happened")
                 continue
 
-    # Final house keeping; close session
+    # Final house keeping; close session and format data table
     session.close()
+    df = parse.format_data(df)
 
     return df
