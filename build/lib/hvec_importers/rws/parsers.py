@@ -72,7 +72,15 @@ def parse_data(raw):
         'AquoMetadata'
         ]
     df = df[keep]
+    return df
 
+
+def format_data(df):
+    """
+    Final formatting for human reading.
+
+    Placing inside the parser slows down the code.
+    """
     # The location column (Locatie) is a column of dictionaries
     LocatieLijst = df['Locatie'].apply(pd.Series)
     LocatieLijst.drop(columns = ['Locatie_MessageID', 'Code'], inplace = True)
@@ -86,7 +94,7 @@ def parse_data(raw):
     keep = [
         'Parameter_Wat_Omschrijving',
         'Eenheid',
-                'MeetApparaat'
+        'MeetApparaat'
     ]
     meta = meta[keep]
 
@@ -109,8 +117,11 @@ def parse_data(raw):
         }, inplace = True
     )
 
+    # Final datatype details
+    df['Status'] = df['Status'].explode()
+
     # Set missing values to None
     if "waarde" in df.columns:
-        df[df["waarde"] == 999999999] = None
+        df.loc[df["waarde"] == 999999999, 'waarde'] = None
 
     return df
