@@ -9,6 +9,8 @@ import dateutil
 import pytz
 import pandas as pd
 
+from hvec_importers.rws.constants import CHUNK
+
 
 def create_selection_table(locations,
     name, quantity,
@@ -129,12 +131,10 @@ def date_series(start, end):
     # Prevent looking for data after today
     end = min(end, dt.datetime.today())
 
-
-    # Roughly to the number of years
     # Minimum two periods to prevent exception of one-element list
     # Accept slight increase of internet-traffic in case of very small requests
     # favoring simplicity of code
-    periods = (((end - start).days) // 720) + 2
+    periods = (((end - start).days) // CHUNK) + 2
 
     date_range = pd.date_range(start, end, periods = periods).to_pydatetime()
 

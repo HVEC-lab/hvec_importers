@@ -27,3 +27,7 @@ LOCATION_FILE = 'locations.json'
 
 # Select main group of parameters by pre-selecting a compartment
 COMPARTMENT = ['OW', 'LT']
+
+
+# Number of days in a single chunk
+CHUNK = 30
