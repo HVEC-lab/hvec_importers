@@ -15,6 +15,7 @@ import json
 import requests
 from tqdm import tqdm
 import pandas as pd
+import time
 
 from hvec_importers.rws import helpers as hlp
 from hvec_importers.rws import parsers as parse
@@ -126,6 +127,7 @@ def get_data(location):
 
     for (start_i, end_i) in tqdm(date_range):
 
+        #time.sleep(1)
         data_present = assert_data_available(location, start_i, end_i, session)
         if data_present:
             try:
@@ -136,7 +138,6 @@ def get_data(location):
             except NoDataException:
                 logging.debug("Data availability is checked beforehand, so this should not have happened")
                 continue
-            #time.sleep(2) # Prevent overloading website
 
     # Final house keeping; close session
     session.close()

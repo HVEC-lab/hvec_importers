@@ -86,7 +86,7 @@ def parse_data(raw):
     keep = [
         'Parameter_Wat_Omschrijving',
         'Eenheid',
-                'MeetApparaat'
+        'MeetApparaat'
     ]
     meta = meta[keep]
 
@@ -109,8 +109,11 @@ def parse_data(raw):
         }, inplace = True
     )
 
+    # Final datatype details
+    df['Status'] = df['Status'].explode()
+
     # Set missing values to None
     if "waarde" in df.columns:
-        df[df["waarde"] == 999999999] = None
+        df.loc[df["waarde"] == 999999999, 'waarde'] = None
 
     return df
