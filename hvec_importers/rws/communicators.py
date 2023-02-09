@@ -133,7 +133,7 @@ def get_data(location):
     date_range = hlp.date_series(location['start'].squeeze(), location['end'].squeeze())
 
     for (start_i, end_i) in tqdm(date_range):
-        time.sleep(2)
+        #time.sleep(2)
         data_present = assert_data_available(location, start_i, end_i, session)
         if data_present:
             try:
