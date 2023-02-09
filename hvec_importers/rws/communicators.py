@@ -11,27 +11,14 @@ different philosophy of interfacing with the user.
 """
 
 import logging
-import pathlib
 import json
 import requests
 from tqdm import tqdm
 import pandas as pd
-import time
 
 from hvec_importers.rws import helpers as hlp
 from hvec_importers.rws import parsers as parse
-
-HEADERS = (
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
-    ' Chrome/105.0.0.0 Safari/537.36')
-
-BASE_URL = "https://waterwebservices.rijkswaterstaat.nl/"
-ENDPOINTS_PATH = pathlib.Path(__file__).with_name("endpoints.json")
-
-with ENDPOINTS_PATH.open() as f:
-    ENDPOINTS = json.load(f)
-
-TIMEOUT = 60
+from hvec_importers.rws.constants import ENDPOINTS, TIMEOUT
 
 class NoDataException(ValueError):
     pass
