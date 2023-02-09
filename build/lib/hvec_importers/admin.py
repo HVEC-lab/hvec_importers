@@ -1,3 +1,3 @@
-__version__ = '2.5.0'
+__version__ = '2.6.0'
 __author__ = 'Hessel Voortman Engineering Consultancy'
 __author_email__ = 'hessel@hesselvoortman.nl'
