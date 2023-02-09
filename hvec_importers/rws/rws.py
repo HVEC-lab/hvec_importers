@@ -22,11 +22,12 @@ import requests
 from hvec_importers.rws import communicators as com
 from hvec_importers.rws import parsers as parse
 from hvec_importers.rws import helpers as hlp
+from hvec_importers.rws.constants import LOCATION_FILE
 
 
 def station_list(renew = False):
     """
-    Get list of station and parameter combinations
+    Get list of station and parameter combinations.
 
     Args:
         None
@@ -34,9 +35,8 @@ def station_list(renew = False):
     Outputs:
         Station list as dataframe
     """
-    FILE = 'locations.json'
 
-    if renew or not os.path.isfile(FILE):
+    if renew or not os.path.isfile(LOCATION_FILE):
         logging.info("Contacting waterinfo for location lists")
         raw = com.station_list_raw()
         clean = parse.parse_station_list(raw)
@@ -44,7 +44,7 @@ def station_list(renew = False):
         clean.reset_index().to_json(r'locations.json', orient='records', index = True)
         return clean
 
-    clean = pd.read_json(FILE, orient='records')
+    clean = pd.read_json(LOCATION_FILE, orient='records')
     clean.set_index("Code", inplace = True)
     return clean
 

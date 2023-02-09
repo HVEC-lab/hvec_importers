@@ -7,11 +7,16 @@ HVEC-lab, 2023
 import logging
 import pandas as pd
 
+from hvec_importers.rws.constants import COMPARTMENT
+
 
 def parse_station_list(raw):
     """
     Take the imported raw station list and parse to
-    dataframe
+    dataframe.
+
+    The selection to the group of parameters specified in
+    constants is applied here.
     """
     df_locations = pd.DataFrame(raw["LocatieLijst"])
 
@@ -27,6 +32,9 @@ def parse_station_list(raw):
     merged = merged.set_index("AquoMetaData_MessageID").join(
         df_metadata.set_index("AquoMetadata_MessageID")
     )
+
+    # Limit the list to the compartment specified in the constants
+    merged = merged.query('`Compartiment.Code`.isin(@COMPARTMENT)')
     # set station id as index
     return merged.set_index("Code")
 

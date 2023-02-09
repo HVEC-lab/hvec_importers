@@ -8,6 +8,7 @@ import datetime as dt
 import numpy as np
 
 from hvec_importers.rws import rws
+from hvec_importers.rws.constants import *
 from hvec_importers.rws import communicators as com
 from hvec_importers.rws import helpers as hlp
 
@@ -35,7 +36,7 @@ def test_connections(endpoint):
     """
     Testing connections
     """
-    endpoint = com.ENDPOINTS[endpoint]
+    endpoint = ENDPOINTS[endpoint]
 
     url = endpoint['url']
     req_txt = endpoint['request']
