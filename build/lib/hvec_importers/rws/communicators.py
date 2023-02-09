@@ -6,31 +6,19 @@ Sub-package of hvec_importers.
 
 Developed by HVEC-lab, 2023
 
-Based on the tool rws-ddlpy by SiggyF
+Based on the tool rws-ddlpy by SiggyF. Refactored, optimised parsers and
+different philosophy of interfacing with the user.
 """
 
 import logging
-import pathlib
 import json
 import requests
 from tqdm import tqdm
 import pandas as pd
-import time
 
 from hvec_importers.rws import helpers as hlp
 from hvec_importers.rws import parsers as parse
-
-HEADERS = (
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
-    ' Chrome/105.0.0.0 Safari/537.36')
-
-BASE_URL = "https://waterwebservices.rijkswaterstaat.nl/"
-ENDPOINTS_PATH = pathlib.Path(__file__).with_name("endpoints.json")
-
-with ENDPOINTS_PATH.open() as f:
-    ENDPOINTS = json.load(f)
-
-TIMEOUT = 60
+from hvec_importers.rws.constants import ENDPOINTS, TIMEOUT
 
 class NoDataException(ValueError):
     pass
@@ -46,12 +34,12 @@ def station_list_raw():
     logging.debug("requesting: {}".format(msg))
 
     resp = requests.post(endpoint["url"], json=endpoint["request"], timeout = TIMEOUT)
-    
+
     if not resp.ok:
         raise IOError("Failed to request {}: {}".format(msg, resp.text))
-    
+
     result = resp.json()
-    
+
     if not result["Succesvol"]:
         logging.exception(str(result))
         raise ValueError(result.get("Foutmelding", "No error returned"))
@@ -127,6 +115,8 @@ def get_data(location):
             The method expects a single entity in the dataframe, so use
             pd.groupby in the call to this method.
     """
+    # TODO: investigate further optimisation by joining the jsons and parse to dataframe only once
+    
     # Create re-usable session
     session = requests.Session()
 
@@ -146,7 +136,9 @@ def get_data(location):
             except NoDataException:
                 logging.debug("Data availability is checked beforehand, so this should not have happened")
                 continue
-            time.sleep(2) # Prevent overloading website
+            #time.sleep(2) # Prevent overloading website
 
+    # Final house keeping; close session
     session.close()
+
     return df
