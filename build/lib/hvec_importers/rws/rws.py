@@ -12,6 +12,7 @@ This module provides three functions wich assume user-friendly input.
 HVEC-lab, 2022
 """
 
+import os
 import logging
 import pandas as pd
 import dateutil
@@ -21,11 +22,12 @@ import requests
 from hvec_importers.rws import communicators as com
 from hvec_importers.rws import parsers as parse
 from hvec_importers.rws import helpers as hlp
+from hvec_importers.rws.constants import LOCATION_FILE
 
 
-def station_list():
+def station_list(renew = False):
     """
-    Get list of station and parameter combinations
+    Get list of station and parameter combinations.
 
     Args:
         None
@@ -33,18 +35,17 @@ def station_list():
     Outputs:
         Station list as dataframe
     """
-    try:
-        clean = pd.read_json(r'locations.json', orient='records')
-        clean.set_index("Code", inplace = True)
-    except IOError as e:
-        logging.info(e)
-        print("Contacting waterinfo for location lists")
+
+    if renew or not os.path.isfile(LOCATION_FILE):
+        logging.info("Contacting waterinfo for location lists")
         raw = com.station_list_raw()
         clean = parse.parse_station_list(raw)
-
         # Store in json file
         clean.reset_index().to_json(r'locations.json', orient='records', index = True)
+        return clean
 
+    clean = pd.read_json(LOCATION_FILE, orient='records')
+    clean.set_index("Code", inplace = True)
     return clean
 
 
@@ -104,13 +105,5 @@ def data_single_name(
     # Drop the resulting multi-index
     df.reset_index(inplace = True)
     df.drop(columns = 'level_1', inplace = True)
-
-    # Add metadata
-    df.set_index(keys = 'Code', inplace = True, verify_integrity = False)
-    selected.set_index(keys = 'Code', inplace = True, verify_integrity = False)
-
-    df = df.join(selected[['Naam', 'X', 'Y']], how = 'inner')
-    if len(df) > 0:
-        df = parse.simplify_output(df)
 
     return df
