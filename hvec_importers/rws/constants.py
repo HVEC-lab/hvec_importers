@@ -30,4 +30,4 @@ COMPARTMENT = ['OW', 'LT']
 
 
 # Number of days in a single chunk
-CHUNK = 30
+CHUNK = 365

@@ -127,7 +127,7 @@ def get_data(location):
 
     for (start_i, end_i) in tqdm(date_range):
 
-        #time.sleep(1)
+        time.sleep(2)
         data_present = assert_data_available(location, start_i, end_i, session)
         if data_present:
             try:
