@@ -75,7 +75,7 @@ def assert_data_available(location, start_i, end_i, session):
     return result['WaarnemingenAanwezig'] == 'true'
 
 
-def _get_raw_slice(location, start_i, end_i, session):
+def get_raw_slice(location, start_i, end_i, session):
     """
     Get raw data from the waterinfo site for a given slice
 
@@ -133,11 +133,11 @@ def get_data(location):
     date_range = hlp.date_series(location['start'].squeeze(), location['end'].squeeze())
 
     for (start_i, end_i) in tqdm(date_range):
-        time.sleep(1)
+        time.sleep(2)
         data_present = assert_data_available(location, start_i, end_i, session)
         if data_present:
             try:
-                raw = _get_raw_slice(location, start_i, end_i, session)
+                raw = get_raw_slice(location, start_i, end_i, session)
                 clean = parse.parse_data(raw)
                 df = pd.concat([df, clean])
 
