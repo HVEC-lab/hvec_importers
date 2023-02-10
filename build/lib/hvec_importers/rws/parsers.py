@@ -81,8 +81,12 @@ def format_data(df):
 
     Placing inside the parser slows down the code.
     """
+    # The dataframe is collected in a number of pieces. For further
+    # processing a single consecutive index is required
+    df.reset_index(drop = True, inplace = True)
+
     # The location column (Locatie) is a column of dictionaries
-    LocatieLijst = df['Locatie'].apply(pd.Series)
+    LocatieLijst = pd.json_normalize(df['Locatie'])
     LocatieLijst.drop(columns = ['Locatie_MessageID', 'Code'], inplace = True)
 
     # ... and add to MetingenLijst while dropping the original column
@@ -90,20 +94,13 @@ def format_data(df):
 
     # Process the AquoMetadata in a similar way
     # But do not bother with unused columns
-    meta = df['AquoMetadata'].apply(pd.Series)
+    meta = pd.json_normalize(df['AquoMetadata'])
     keep = [
         'Parameter_Wat_Omschrijving',
-        'Eenheid',
-        'MeetApparaat'
+        'Eenheid.Code',
+        'MeetApparaat.Omschrijving'
     ]
     meta = meta[keep]
-
-    # Extract relevant info from Eenheid and MeetApparaat and add
-    tmp = meta['Eenheid'].apply(pd.Series)['Code']
-    meta['Eenheid'] = tmp # Reuse column; replace values
-
-    tmp = meta['MeetApparaat'].apply(pd.Series)['Omschrijving']
-    meta['MeetApparaat'] = tmp
 
     df = pd.concat(
         [df.drop(columns = 'AquoMetadata'), meta], axis = 1)
@@ -113,7 +110,9 @@ def format_data(df):
         columns = {
             'Meetwaarde.Waarde_Numeriek': 'waarde',
             'Parameter_Wat_Omschrijving': 'Parameter_Omschrijving',
-            'WaarnemingMetadata.StatuswaardeLijst': 'Status'
+            'WaarnemingMetadata.StatuswaardeLijst': 'Status',
+            'Eenheid.Code': 'Eenheid',
+            'MeetApparaat.Omschrijving': 'Meetapparaat'
         }, inplace = True
     )
 
