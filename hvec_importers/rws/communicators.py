@@ -125,7 +125,7 @@ def get_data(location):
     # Check if there is any data under the current code
     start = dateutil.parser.parse(location['start'].squeeze())
     end =   dateutil.parser.parse(location['end'].squeeze())
-    empty_code = not(assert_data_available(location, start, end, session))
+    empty_code = not assert_data_available(location, start, end, session)
     if empty_code: # Break early if no data is present
         session.close()
         return df
