@@ -81,6 +81,10 @@ def format_data(df):
 
     Placing inside the parser slows down the code.
     """
+    # The dataframe is collected in a number of pieces. For further
+    # processing a single consecutive index is required
+    df.reset_index(drop = True, inplace = True)
+
     # The location column (Locatie) is a column of dictionaries
     LocatieLijst = pd.json_normalize(df['Locatie'])
     LocatieLijst.drop(columns = ['Locatie_MessageID', 'Code'], inplace = True)

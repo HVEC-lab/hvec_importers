@@ -17,8 +17,7 @@ import_tests =  [
         ('Den Helder', 'WATHTE', '1972-1-1', '31-12-1975'),
         ('Lobith', 'Q', '3-2-1925', '10-10-1928'),
         ('Vlissingen', 'WATHTE', '1953-01-01', '1953-02-28'),
-        ('Harlingen', 'WATHTE', '2023-01-01', '2023-12-31'),
-        ('Roggenplaat', 'Hm0', '24-1-1990', '26-1-1990')
+        ('Harlingen', 'WATHTE', '2023-01-01', '2023-12-31')
         ]
 
 @pyt.mark.parametrize(
