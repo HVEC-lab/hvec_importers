@@ -75,7 +75,7 @@ def assert_data_available(location, start_i, end_i, session):
     return result['WaarnemingenAanwezig'] == 'true'
 
 
-def _get_raw_slice(location, start_i, end_i, session):
+def get_raw_slice(location, start_i, end_i, session):
     """
     Get raw data from the waterinfo site for a given slice
 
@@ -125,7 +125,7 @@ def get_data(location):
     # Check if there is any data under the current code
     start = dateutil.parser.parse(location['start'].squeeze())
     end =   dateutil.parser.parse(location['end'].squeeze())
-    empty_code = not(assert_data_available(location, start, end, session))
+    empty_code = not assert_data_available(location, start, end, session)
     if empty_code: # Break early if no data is present
         session.close()
         return df
@@ -133,11 +133,11 @@ def get_data(location):
     date_range = hlp.date_series(location['start'].squeeze(), location['end'].squeeze())
 
     for (start_i, end_i) in tqdm(date_range):
-        #time.sleep(2)
+        time.sleep(2)
         data_present = assert_data_available(location, start_i, end_i, session)
         if data_present:
             try:
-                raw = _get_raw_slice(location, start_i, end_i, session)
+                raw = get_raw_slice(location, start_i, end_i, session)
                 clean = parse.parse_data(raw)
                 df = pd.concat([df, clean])
 
@@ -147,6 +147,6 @@ def get_data(location):
 
     # Final house keeping; close session and format data table
     session.close()
-    df = parse.format_data(df)
-
+    if len(df) > 0:
+        df = parse.format_data(df)
     return df
