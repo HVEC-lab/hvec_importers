@@ -108,7 +108,7 @@ def format_data(df):
     # Shorten column names
     df.rename(
         columns = {
-            'Meetwaarde.Waarde_Numeriek': 'waarde',
+            'Meetwaarde.Waarde_Numeriek': 'Waarde',
             'Parameter_Wat_Omschrijving': 'Parameter_Omschrijving',
             'WaarnemingMetadata.StatuswaardeLijst': 'Status',
             'Eenheid.Code': 'Eenheid',
