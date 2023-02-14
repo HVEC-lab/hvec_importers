@@ -118,6 +118,7 @@ def format_data(df):
 
     # Final datatype details
     df['Status'] = df['Status'].explode()
+    df = df.astype({'Tijdstip': 'datetime64[ns]'})
 
     # Set missing values to None
     if "waarde" in df.columns:
