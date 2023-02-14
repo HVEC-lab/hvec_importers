@@ -18,7 +18,8 @@ ENDPOINTS_PATH = pathlib.Path(__file__).with_name("endpoints.json")
 with ENDPOINTS_PATH.open() as f:
     ENDPOINTS = json.load(f)
 
-TIMEOUT = 1200
+TIMEOUT = 120
+MAX_ATTEMPT = 5
 
 # Name of the local location file. Locally storing the location list in json
 # provides considerable performance gain
