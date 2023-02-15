@@ -20,7 +20,7 @@ with ENDPOINTS_PATH.open() as f:
 
 TIMEOUT = 90 # time out for internet connection
 MAX_ATTEMPT = 5 # maximum attempts for contacting website
-WAIT = 0  # waiting time between site transactions
+WAIT = 1  # waiting time between site transactions
 
 # Name of the local location file. Locally storing the location list in json
 # provides considerable performance gain
