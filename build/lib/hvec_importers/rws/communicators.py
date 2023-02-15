@@ -20,7 +20,7 @@ import time
 
 from hvec_importers.rws import helpers as hlp
 from hvec_importers.rws import parsers as parse
-from hvec_importers.rws.constants import ENDPOINTS, TIMEOUT
+from hvec_importers.rws.constants import ENDPOINTS, TIMEOUT, WAIT, MAX_ATTEMPT
 
 class NoDataException(ValueError):
     pass
@@ -75,6 +75,21 @@ def assert_data_available(location, start_i, end_i, session):
     return result['WaarnemingenAanwezig'] == 'true'
 
 
+def prune_date_range(location, long_range, session):
+    """
+    Use information on data availabiilty to exclude empty
+    date intervals from time consuming import
+    """
+    starts = []
+    ends = []
+    for (start_i, end_i) in long_range:
+        data_present = assert_data_available(location, start_i, end_i, session)
+        if data_present:
+            starts.append(start_i)
+            ends.append(end_i)
+    return list(zip(starts, ends))
+
+
 def get_raw_slice(location, start_i, end_i, session):
     """
     Get raw data from the waterinfo site for a given slice
@@ -90,19 +105,25 @@ def get_raw_slice(location, start_i, end_i, session):
 
     request = hlp.create_data_request(location, start_i, end_i)
 
-    try:
-        logging.debug("requesting:  {}".format(request))
+    for n in range(MAX_ATTEMPT):
+        try:
+            logging.debug("requesting: {}. Attempt {}".format(request, n))
+            resp = session.post(endpoint["url"], json=request, timeout = TIMEOUT)
 
-        resp = session.post(endpoint["url"], json=request, timeout = TIMEOUT)
-        result = resp.json()
+            if not resp.ok: # Incorrect website response; try again
+                logging.info(f"Attempt {n}. Website responds with {resp}")
+                continue
 
-        if not result["Succesvol"]:
-            logging.debug("Got  invalid response: {}".format(result))
-            raise NoDataException(result.get("Foutmelding", "No error returned"))
+            result = resp.json()
+            if not result["Succesvol"]: # Even in case of correct response, no data may be returned
+                logging.debug("Got  invalid response: {}".format(result))
+                raise NoDataException(result.get("Foutmelding", "No error returned"))
 
-    except NoDataException as e:
-        logging.debug("No data available for {} {}".format(start_i, end_i))
-        raise e
+        except NoDataException as e:
+            logging.debug("No data available for {} {}".format(start_i, end_i))
+            raise e
+        
+        break  # This point is reached only if response is ok and no error is raised. So no new attempt required
 
     return result
 
@@ -122,28 +143,21 @@ def get_data(location):
     # Create re-usable session
     session = requests.Session()
 
-    # Check if there is any data under the current code
-    start = dateutil.parser.parse(location['start'].squeeze())
-    end =   dateutil.parser.parse(location['end'].squeeze())
-    empty_code = not assert_data_available(location, start, end, session)
-    if empty_code: # Break early if no data is present
-        session.close()
-        return df
-
+    # Prepare date range
     date_range = hlp.date_series(location['start'].squeeze(), location['end'].squeeze())
+    date_range = prune_date_range(location, date_range, session)
 
     for (start_i, end_i) in tqdm(date_range):
-        time.sleep(2)
-        data_present = assert_data_available(location, start_i, end_i, session)
-        if data_present:
-            try:
-                raw = get_raw_slice(location, start_i, end_i, session)
-                clean = parse.parse_data(raw)
-                df = pd.concat([df, clean])
-
-            except NoDataException:
-                logging.debug("Data availability is checked beforehand, so this should not have happened")
-                continue
+        time.sleep(WAIT)
+        try:
+            raw = get_raw_slice(location, start_i, end_i, session)
+            clean = parse.parse_data(raw)
+            df = pd.concat([df, clean])
+        except NoDataException:
+            logging.debug(
+                "Apparent inconsistency between reported "
+                "and actual availability of data on remote site")
+            continue
 
     # Final house keeping; close session and format data table
     session.close()

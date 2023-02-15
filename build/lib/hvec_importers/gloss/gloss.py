@@ -25,8 +25,8 @@ from hvec_importers import helpers
 from hvec_importers import parsers as parse
 
 
-max_attempt = 5
-timeout = 20  # Maximum number of tries to contact a website
+max_attempt = 5 # Maximum number of tries to contact a website
+timeout = 20  
 
 
 url = {

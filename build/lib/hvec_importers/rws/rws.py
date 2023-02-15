@@ -63,7 +63,7 @@ def data_availability(
         end, string or datetime; end date
 
     Output:
-
+        res: boolean
     """
     session = requests.session()
 
@@ -81,6 +81,37 @@ def data_availability(
     session.close()
     return res
 
+
+def number_of_points(
+    name, quantity,
+    start = '1800-01-01',
+    end   = '2100-12-31'):
+    """
+    Show number of points using human input
+
+    Args:
+        name, string
+        quantity, string; specified in accordance with RWS specs
+        start, string or datetime; start date
+        end, string or datetime; end date
+
+    Output:
+        res: dataframe
+    """
+    session = requests.session()
+
+    start = dateutil.parser.parse(start)
+    end   = dateutil.parser.parse(end)
+
+    locations = station_list()
+    selected  = hlp.create_selection_table(locations, name, quantity, start, end)
+
+    # A location may be stored under multiple codes; check for all
+    res = selected.groupby('Code').apply(
+        lambda x: com.get_number_of_points(x, start, end, session)).reset_index()
+
+    session.close()
+    return res
 
 def data_single_name(
     name, quantity,
