@@ -42,7 +42,6 @@ def create_selection_table(locations,
     selected.reset_index(inplace=True)
 
     # Add dates to specification
-    #TODO remove; not used
     selected['start'] = start
     selected['end'] = end
     return selected
