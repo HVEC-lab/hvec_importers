@@ -74,6 +74,16 @@ def test_data_availability(name, quantity, start, end):
 
 
 @pyt.mark.parametrize("name, quantity, start, end", import_tests)
+def test_number_of_points(name, quantity, start, end):
+    """
+    Test method for number of data points
+    """
+    res = rws.number_of_points(name, quantity, start, end)
+    assert len(res.columns) > 1
+    assert res.dtypes[1] == 'bool'
+
+
+@pyt.mark.parametrize("name, quantity, start, end", import_tests)
 def test_data_single_name(name, quantity, start, end):
     """
     Test data import RWS Waterinfo
