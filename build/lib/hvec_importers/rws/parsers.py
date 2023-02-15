@@ -108,7 +108,7 @@ def format_data(df):
     # Shorten column names
     df.rename(
         columns = {
-            'Meetwaarde.Waarde_Numeriek': 'waarde',
+            'Meetwaarde.Waarde_Numeriek': 'Waarde',
             'Parameter_Wat_Omschrijving': 'Parameter_Omschrijving',
             'WaarnemingMetadata.StatuswaardeLijst': 'Status',
             'Eenheid.Code': 'Eenheid',
@@ -118,6 +118,7 @@ def format_data(df):
 
     # Final datatype details
     df['Status'] = df['Status'].explode()
+    df = df.astype({'Tijdstip': 'datetime64[ns]'})
 
     # Set missing values to None
     if "waarde" in df.columns:

@@ -103,7 +103,7 @@ def data_single_id(nr, session, freq = 'annual', tp = 'rlr'):
             usecols = [0, 1],
             na_values = -99999
         )
-        
+
         df.columns = ['time', 'level']
         df['id'] = nr
         df['freq'] = freq

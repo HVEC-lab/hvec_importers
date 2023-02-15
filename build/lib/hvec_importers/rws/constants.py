@@ -18,16 +18,16 @@ ENDPOINTS_PATH = pathlib.Path(__file__).with_name("endpoints.json")
 with ENDPOINTS_PATH.open() as f:
     ENDPOINTS = json.load(f)
 
-TIMEOUT = 1200
+TIMEOUT = 90 # time out for internet connection
+MAX_ATTEMPT = 5 # maximum attempts for contacting website
+WAIT = 0  # waiting time between site transactions
 
 # Name of the local location file. Locally storing the location list in json
 # provides considerable performance gain
 LOCATION_FILE = 'locations.json'
 
-
 # Select main group of parameters by pre-selecting a compartment
 COMPARTMENT = ['OW', 'LT']
 
-
-# Number of days in a single chunk
-CHUNK = 365
+# Calendar months in a chunk
+CHUNK = 6
