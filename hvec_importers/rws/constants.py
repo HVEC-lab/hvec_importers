@@ -31,3 +31,7 @@ COMPARTMENT = ['OW', 'LT']
 
 # Calendar months in a chunk
 CHUNK = 6
+
+# Default date range
+DT_MIN = '1680-1-1'
+DT_MAX = '2100-12-31'

@@ -22,7 +22,7 @@ import requests
 from hvec_importers.rws import communicators as com
 from hvec_importers.rws import parsers as parse
 from hvec_importers.rws import helpers as hlp
-from hvec_importers.rws.constants import LOCATION_FILE
+from hvec_importers.rws.constants import LOCATION_FILE, DT_MIN, DT_MAX
 
 
 def station_list(renew = False):
@@ -51,8 +51,8 @@ def station_list(renew = False):
 
 def data_availability(
     name, quantity,
-    start = '1800-01-01',
-    end   = '2100-12-31'):
+    start = DT_MIN,
+    end   = DT_MAX):
     """
     Show data availability using human input
 
@@ -82,41 +82,10 @@ def data_availability(
     return res
 
 
-def number_of_points(
-    name, quantity,
-    start = '1800-01-01',
-    end   = '2100-12-31'):
-    """
-    Show number of points using human input
-
-    Args:
-        name, string
-        quantity, string; specified in accordance with RWS specs
-        start, string or datetime; start date
-        end, string or datetime; end date
-
-    Output:
-        res: dataframe
-    """
-    session = requests.session()
-
-    start = dateutil.parser.parse(start)
-    end   = dateutil.parser.parse(end)
-
-    locations = station_list()
-    selected  = hlp.create_selection_table(locations, name, quantity, start, end)
-
-    # A location may be stored under multiple codes; check for all
-    res = selected.groupby('Code').apply(
-        lambda x: com.get_number_of_points(x, start, end, session)).reset_index()
-
-    session.close()
-    return res
-
 def data_single_name(
     name, quantity,
-    start = '1850-01-01',
-    end = '2100-12-31'):
+    start = DT_MIN,
+    end = DT_MAX):
     """
     Take natural input, process it and harvest data
 
