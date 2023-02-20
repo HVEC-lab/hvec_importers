@@ -121,7 +121,6 @@ def format_data(df):
     df = df.astype({'Tijdstip': 'datetime64[ns]'})
 
     # Set missing values to None
-    if "waarde" in df.columns:
-        df.loc[df["waarde"] == 999999999, 'waarde'] = None
+    df.loc[df["Waarde"] > 9e4, 'Waarde'] = None
 
     return df
