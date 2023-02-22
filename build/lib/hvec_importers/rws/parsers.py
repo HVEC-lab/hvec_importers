@@ -123,7 +123,4 @@ def format_data(df):
     # Set missing values to None
     df.loc[df["Waarde"] > 9e4, 'Waarde'] = None
 
-    # Sort by date
-    df.sort_values(by = 'Tijdstip', inplace = True)
-
     return df
