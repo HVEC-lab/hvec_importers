@@ -76,6 +76,9 @@ def date_series(start, end):
     #interval = end - start
     #if interval < dt.timedelta(days = 366):
     #    return list(zip(start, end))
+    interval = dateutil.relativedelta.relativedelta(end, start)
+    if interval.months < CHUNK:
+        return [(start, end)]
 
     starts = pd.date_range(start, end, freq = f'{CHUNK}MS').to_pydatetime()
     ends = starts + dateutil.relativedelta.relativedelta(months = CHUNK, days = -1)
