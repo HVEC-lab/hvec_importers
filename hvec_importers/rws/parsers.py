@@ -8,7 +8,7 @@ import logging
 import pandas as pd
 import datetime as dt
 
-from hvec_importers.rws.constants import MIN_PER_MEAS
+from hvec_importers.rws.constants import COMPARTMENT, MIN_PER_MEAS
 
 
 def parse_station_list(raw):
