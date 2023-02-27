@@ -6,8 +6,9 @@ HVEC-lab, 2023
 
 import logging
 import pandas as pd
+import datetime as dt
 
-from hvec_importers.rws.constants import COMPARTMENT
+from hvec_importers.rws.constants import MIN_PER_MEAS
 
 
 def parse_station_list(raw):
@@ -75,6 +76,27 @@ def parse_data(raw):
     return df
 
 
+def reduce_data(df):
+    """
+    Reduce data to hourly values unless the difference to the previous line
+    is more than one hour difference with the previous line.
+
+    Args:
+        df, dataframe: waterinfo output transformed to dataframe
+
+    Out:
+        df, dataframe: reduced data
+    """
+
+    # Put raw in DataFrame
+    keep = (
+          (df['Tijdstip'].diff() > dt.timedelta(minutes = MIN_PER_MEAS))
+        | (df['Tijdstip'].dt.minute%MIN_PER_MEAS == 0)
+    )
+    df = df[keep]
+    return df
+
+
 def format_data(df):
     """
     Final formatting for human reading.
@@ -84,6 +106,11 @@ def format_data(df):
     # The dataframe is collected in a number of pieces. For further
     # processing a single consecutive index is required
     df.reset_index(drop = True, inplace = True)
+
+    # Set date to correct type and reduce data first
+    df['Tijdstip'] = pd.to_datetime(df['Tijdstip'])
+    df.sort_values(by = 'Tijdstip', inplace = True)
+    df = reduce_data(df)
 
     # The location column (Locatie) is a column of dictionaries
     LocatieLijst = pd.json_normalize(df['Locatie'])
@@ -118,7 +145,6 @@ def format_data(df):
 
     # Final datatype details
     df['Status'] = df['Status'].explode()
-    df = df.astype({'Tijdstip': 'datetime64[ns]'})
 
     # Set missing values to None
     df.loc[df["Waarde"] > 9e4, 'Waarde'] = None
