@@ -103,14 +103,14 @@ def format_data(df):
 
     Placing inside the parser slows down the code.
     """
-    # The dataframe is collected in a number of pieces. For further
-    # processing a single consecutive index is required
-    df.reset_index(drop = True, inplace = True)
-
     # Set date to correct type and reduce data first
     df['Tijdstip'] = pd.to_datetime(df['Tijdstip'])
     df.sort_values(by = 'Tijdstip', inplace = True)
     df = reduce_data(df)
+
+    # The dataframe is collected in a number of pieces. For further
+    # processing a single consecutive index is required
+    df.reset_index(drop = True, inplace = True)
 
     # The location column (Locatie) is a column of dictionaries
     LocatieLijst = pd.json_normalize(df['Locatie'])
@@ -148,6 +148,9 @@ def format_data(df):
 
     # Set missing values to None
     df.loc[df["Waarde"] > 9e4, 'Waarde'] = None
+
+    # Drop full duplicates
+    df.drop_duplicates(inplace = True)
 
     # Sort by date
     df.sort_values(by = 'Tijdstip', inplace = True)
