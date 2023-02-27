@@ -19,7 +19,8 @@ import_tests =  [
         ('Vlissingen', 'WATHTE', '1953-01-01', '1953-02-28'),
 #        ('Vlissingen', 'WATHTE', '1680-01-01', '2100-12-31'),
         ('Harlingen', 'WATHTE', '2023-01-01', '2023-12-31'),
-        ('Roggenplaat', 'Hm0', '2023-2-1', '2023-2-28')
+        ('Roggenplaat', 'Hm0', '2023-2-1', '2023-2-28'),
+        ('Euro platform', 'WATHTE', '1-1-1990', '31-1-1990')
         ]
 
 @pyt.mark.parametrize(
@@ -72,7 +73,7 @@ def test_data_availability(name, quantity, start, end):
     """
     res = rws.data_availability(name, quantity, start, end)
     assert len(res.columns) > 1
-    assert res.dtypes[1] == 'bool'
+    assert res.dtypes[2] == 'bool'
 
 
 @pyt.mark.parametrize("name, quantity, start, end", import_tests)

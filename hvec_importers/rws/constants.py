@@ -30,7 +30,10 @@ LOCATION_FILE = 'locations.json'
 COMPARTMENT = ['OW', 'LT']
 
 # Calendar months in a chunk
-CHUNK = 6
+CHUNK = 24
+
+# Minimum minutes per measurements (integer between 1 and 60)
+MIN_PER_MEAS = 60
 
 # Default date range
 DT_MIN = '1680-1-1'

@@ -74,9 +74,9 @@ def data_availability(
     selected  = hlp.create_selection_table(locations, name, quantity, start, end)
 
     # A location may be stored under multiple codes; check for all
-    res = selected.groupby('Code').apply(
+    res = selected.groupby(['Code', 'Hoedanigheid.Code']).apply(
         lambda x: com.assert_data_available(x, start, end, session)).reset_index()
-    res.columns = ["Code", "Data_present"]
+    res.columns = ["Code", "Hoedanigheid", "Data_present"]
 
     session.close()
     return res
@@ -98,12 +98,12 @@ def data_single_name(
     stations = station_list()
     selected = hlp.create_selection_table(stations, name, quantity, start, end)
 
-    df = selected.groupby('Code').apply(
+    df = selected.groupby(['Code', 'Hoedanigheid.Code']).apply(
         lambda x: com.get_data(x))
 
     # The data from all codes is combined in a single dataframe
     # Drop the resulting multi-index
     df.reset_index(inplace = True)
-    df.drop(columns = 'level_1', inplace = True)
+    df.drop(columns = 'level_2', inplace = True)
 
     return df
