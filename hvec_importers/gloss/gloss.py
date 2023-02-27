@@ -105,9 +105,9 @@ def data_single_id(id, session = requests.session(), type = 'fast_delivery', dro
     if res.ok:
         df = pd.read_csv(io.BytesIO(res.content), header = 0, skiprows = [1])
 
-        df.dropna(axis = 'rows', how = 'any', inplace = True)
+        #df.dropna(subset = 'time', axis = 'rows', how = 'all', inplace = True)
         #TODO check timezone definitiions in original data
-        df['time'] = pd.to_datetime(df['time'], yearfirst = True).dt.tz_convert(None)
+        df['time'] = pd.to_datetime(df['time'], yearfirst = True) #.dt.tz_convert(None)
         if drop_current_year:
             df = df.loc[df['time'].dt.year < dt.date.today().year]
 
