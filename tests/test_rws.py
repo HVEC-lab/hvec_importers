@@ -17,7 +17,7 @@ import_tests =  [
         ('Den Helder', 'WATHTE', '1972-1-1', '31-12-1975'),
         ('Lobith', 'Q', '3-2-1925', '10-10-1928'),
         ('Vlissingen', 'WATHTE', '1953-01-01', '1953-02-28'),
-#        ('Vlissingen', 'WATHTE', '1680-01-01', '2100-12-31'),
+        ('Roompot binnen', 'WATHTE', '1-1-1989', '31-12-1991'),
         ('Harlingen', 'WATHTE', '2023-01-01', '2023-12-31'),
         ('Roggenplaat', 'Hm0', '2023-2-1', '2023-2-28'),
         ('Euro platform', 'WATHTE', '1-1-2015', '31-1-2015')

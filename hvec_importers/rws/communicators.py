@@ -152,7 +152,10 @@ def get_data(location):
         time.sleep(WAIT)
         try:
             raw = get_raw_slice(location, start_i, end_i, session)
+
             clean = parse.parse_data(raw)
+            clean = parse.format_data(clean)
+
             df = pd.concat([df, clean])
         except NoDataException:
             logging.debug(
@@ -162,6 +165,6 @@ def get_data(location):
 
     # Final house keeping; close session and format data table
     session.close()
-    if len(df) > 0:
-        df = parse.format_data(df)
+    #if len(df) > 0:
+        #df = parse.format_data(df)
     return df
