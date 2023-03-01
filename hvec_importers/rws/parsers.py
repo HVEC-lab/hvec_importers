@@ -104,7 +104,7 @@ def format_data(df):
     Placing inside the parser slows down the code.
     """
     # Set date to correct type and reduce data first
-    df['Tijdstip'] = pd.to_datetime(df['Tijdstip'], infer_datetime_format = True)
+    df['Tijdstip'] = df['Tijdstip'].astype('datetime64[ns]')
     df.sort_values(by = 'Tijdstip', inplace = True)
     df = reduce_data(df)
 
