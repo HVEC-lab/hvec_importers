@@ -85,7 +85,8 @@ def data_availability(
 def data_single_name(
     name, quantity,
     start = DT_MIN,
-    end = DT_MAX):
+    end = DT_MAX,
+    reduce = True):
     """
     Take natural input, process it and harvest data
 
@@ -99,7 +100,7 @@ def data_single_name(
     selected = hlp.create_selection_table(stations, name, quantity, start, end)
 
     df = selected.groupby(['Code', 'Hoedanigheid.Code']).apply(
-        lambda x: com.get_data(x))
+        lambda x: com.get_data(x, reduce))
 
     # The data from all codes is combined in a single dataframe
     # Drop the resulting multi-index

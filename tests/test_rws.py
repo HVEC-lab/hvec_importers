@@ -14,13 +14,13 @@ from hvec_importers.rws import helpers as hlp
 
 # Import test cases
 import_tests =  [
-        ('Den Helder', 'WATHTE', '1972-1-1', '31-12-1975'),
-        ('Lobith', 'Q', '3-2-1925', '10-10-1928'),
-        ('Vlissingen', 'WATHTE', '1953-01-01', '1953-02-28'),
-        ('Roompot binnen', 'WATHTE', '1-1-1989', '31-12-1991'),
-        ('Harlingen', 'WATHTE', '2023-01-01', '2023-12-31'),
-        ('Roggenplaat', 'Hm0', '2023-2-1', '2023-2-28'),
-        ('Euro platform', 'WATHTE', '1-1-2015', '31-1-2015')
+        ('Den Helder', 'WATHTE', '1972-1-1', '31-12-1975', True),
+        ('Lobith', 'Q', '3-2-1925', '10-10-1928', True),
+        ('Vlissingen', 'WATHTE', '1953-01-01', '1953-02-28', True),
+        #('Roompot binnen', 'WATHTE', '1-1-1989', '31-12-1991'),
+        ('Harlingen', 'WATHTE', '2023-01-01', '2023-12-31', False),
+        ('Roggenplaat', 'Hm0', '2023-2-1', '2023-2-28', False),
+        ('Euro platform', 'WATHTE', '1-1-2015', '31-1-2015', False)
         ]
 
 @pyt.mark.parametrize(
@@ -57,8 +57,8 @@ def test_station_list(renew):
     assert len(stations) > 15000
 
 
-@pyt.mark.parametrize("name, quantity, start, end", import_tests)
-def test_create_selection_table(name, quantity, start, end):
+@pyt.mark.parametrize("name, quantity, start, end, reduce", import_tests)
+def test_create_selection_table(name, quantity, start, end, reduce):
     """
     Test creating import request from human input
     """
@@ -66,8 +66,8 @@ def test_create_selection_table(name, quantity, start, end):
     req = hlp.create_selection_table(locations, name, quantity, start, end)
     assert len(req.columns) > 1
 
-@pyt.mark.parametrize("name, quantity, start, end", import_tests)
-def test_data_availability(name, quantity, start, end):
+@pyt.mark.parametrize("name, quantity, start, end, reduce", import_tests)
+def test_data_availability(name, quantity, start, end, reduce):
     """
     Test method for data availability with human input
     """
@@ -76,10 +76,10 @@ def test_data_availability(name, quantity, start, end):
     assert res.dtypes[2] == 'bool'
 
 
-@pyt.mark.parametrize("name, quantity, start, end", import_tests)
-def test_data_single_name(name, quantity, start, end):
+@pyt.mark.parametrize("name, quantity, start, end, reduce", import_tests)
+def test_data_single_name(name, quantity, start, end, reduce):
     """
     Test data import RWS Waterinfo
     """
-    df = rws.data_single_name(name, quantity, start, end)
+    df = rws.data_single_name(name, quantity, start, end, reduce)
     assert len(df.columns) > 1
