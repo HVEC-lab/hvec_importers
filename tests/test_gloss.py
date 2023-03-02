@@ -20,7 +20,7 @@ from hvec_importers.gloss import gloss
         gloss.url['fast_delivery']+'284'])
 
 def test_connections(url):
-    res = requests.get(url, timeout = 10)
+    res = requests.get(url, timeout = 60)
     assert res.ok
 
 

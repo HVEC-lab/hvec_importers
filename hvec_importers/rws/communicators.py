@@ -129,7 +129,7 @@ def get_raw_slice(location, start_i, end_i, session):
     return result
 
 
-def get_data(location):
+def get_data(location, reduce):
     """
     Slice the requested time interval. Download data in slices, parse to dataframe
     and merge.
@@ -146,16 +146,13 @@ def get_data(location):
 
     # Prepare date range
     date_range = hlp.date_series(location['start'].squeeze(), location['end'].squeeze())
-    date_range = prune_date_range(location, date_range, session)
 
     for (start_i, end_i) in tqdm(date_range):
         time.sleep(WAIT)
         try:
             raw = get_raw_slice(location, start_i, end_i, session)
-
             clean = parse.parse_data(raw)
-            clean = parse.format_data(clean)
-
+            clean = parse.format_data(clean, reduce)
             df = pd.concat([df, clean])
         except NoDataException:
             logging.debug(
@@ -163,8 +160,6 @@ def get_data(location):
                 "and actual availability of data on remote site")
             continue
 
-    # Final house keeping; close session and format data table
+    # Final house keeping; close session
     session.close()
-    #if len(df) > 0:
-        #df = parse.format_data(df)
     return df

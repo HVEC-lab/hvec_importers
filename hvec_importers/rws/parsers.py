@@ -97,7 +97,7 @@ def reduce_data(df):
     return df
 
 
-def format_data(df):
+def format_data(df, reduce = True):
     """
     Final formatting for human reading.
 
@@ -106,7 +106,7 @@ def format_data(df):
     # Set date to correct type and reduce data first
     df['Tijdstip'] = df['Tijdstip'].astype('datetime64[ns]')
     df.sort_values(by = 'Tijdstip', inplace = True)
-    df = reduce_data(df)
+    if reduce: df = reduce_data(df)
 
     # The dataframe is collected in a number of pieces. For further
     # processing a single consecutive index is required
