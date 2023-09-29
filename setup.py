@@ -16,16 +16,9 @@ setup(
     description = 'Python package with importers '
                 'for several open data sources.',
     long_description=long_description,
-#    url='https://github.com/pastas/pastas',
-#    project_urls={
-#        'Source': 'https://github.com/pastas/pastas',
-#        'Documentation': 'http://pastas.readthedocs.io/en/latest/',
-#        'Tracker': 'https://github.com/pastas/pastas/issues',
-#        'Help': 'https://github.com/pastas/pastas/discussions'
-#    },
     license='MIT',
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Science/Research',
         'Intended Audience :: Other Audience',
         'License :: OSI Approved :: MIT License',
@@ -34,9 +27,9 @@ setup(
         'Topic :: Scientific/Engineering'
     ],
     platforms='Windows',
-    install_requires=['numpy>=1.17',
-                      'pandas>=1.1',
-                      'scipy>=1.3',
+    install_requires=['numpy',
+                      'pandas>=2.0',
+                      'scipy',
                       'requests',
                       'tqdm',
                       'lxml',
