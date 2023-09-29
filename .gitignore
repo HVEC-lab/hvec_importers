@@ -106,3 +106,9 @@ build/lib/hvec_importers/rws/endpoints.json
 build/lib/hvec_importers/rws/helpers.py
 build/lib/hvec_importers/rws/parsers.py
 build/lib/hvec_importers/rws/rws.py
+tests/__pycache__/test_gloss.cpython-311-pytest-7.4.2.pyc
+tests/__pycache__/test_ipcc.cpython-311-pytest-7.4.2.pyc
+tests/__pycache__/test_mvb.cpython-311-pytest-7.4.2.pyc
+tests/__pycache__/test_psmsl.cpython-311-pytest-7.4.2.pyc
+tests/__pycache__/test_rws.cpython-311-pytest-7.4.2.pyc
+locations.json

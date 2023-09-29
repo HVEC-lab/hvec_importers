@@ -1,0 +1,9 @@
+numpy
+pandas>=2.0
+scipy
+requests
+tqdm
+lxml
+openpyxl
+pytest
+matplotlib

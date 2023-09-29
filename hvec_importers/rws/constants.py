@@ -18,7 +18,7 @@ ENDPOINTS_PATH = pathlib.Path(__file__).with_name("endpoints.json")
 with ENDPOINTS_PATH.open() as f:
     ENDPOINTS = json.load(f)
 
-TIMEOUT = 90 # time out for internet connection
+TIMEOUT = 120 # time out for internet connection
 MAX_ATTEMPT = 5 # maximum attempts for contacting website
 WAIT = 0  # waiting time between site transactions
 
@@ -30,7 +30,7 @@ LOCATION_FILE = 'locations.json'
 COMPARTMENT = ['OW', 'LT']
 
 # Calendar months in a chunk
-CHUNK = 3
+CHUNK = 6
 
 # Minimum minutes per measurements (integer between 1 and 60)
 MIN_PER_MEAS = 60

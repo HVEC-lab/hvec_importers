@@ -41,7 +41,7 @@ def station_list(renew = False):
         raw = com.station_list_raw()
         clean = parse.parse_station_list(raw)
         # Store in json file
-        clean.reset_index().to_json(r'locations.json', orient='records', index = True)
+        clean.reset_index().to_json(r'locations.json', orient='records')
         return clean
 
     clean = pd.read_json(LOCATION_FILE, orient='records')
