@@ -20,7 +20,8 @@ import_tests =  [
         #('Roompot binnen', 'WATHTE', '1-1-1989', '31-12-1991'),
         ('Harlingen', 'WATHTE', '2023-01-01', '2023-12-31', False),
         ('Roggenplaat', 'Hm0', '2023-2-1', '2023-2-28', False),
-        ('Euro platform', 'WATHTE', '1-1-2015', '31-1-2015', False)
+        ('Euro platform', 'WATHTE', '1-1-2015', '31-1-2015', False),
+        ('Hoek van Holland', 'WINDSHD', '1-1-1900', '31-12-2022', False)
         ]
 
 @pyt.mark.parametrize(
