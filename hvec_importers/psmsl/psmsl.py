@@ -93,7 +93,6 @@ def data_single_id(nr, session, freq = 'annual', tp = 'rlr'):
     # PSMSL contains pages without data
     # Checking for it and continue dependent on condition
     res = session.get(base + data_url, timeout = 60)
-    time.sleep(2)  # Prevent overloading the website
 
     if len(res.text) > 0:
         df = pd.read_csv(
