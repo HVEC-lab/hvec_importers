@@ -123,9 +123,10 @@ def format_data(df, reduce = True):
     # But do not bother with unused columns
     meta = pd.json_normalize(df['AquoMetadata'])
     keep = [
-        'Parameter_Wat_Omschrijving',
-        'Eenheid.Code',
-        'MeetApparaat.Omschrijving'
+          'Grootheid.Code'
+        , 'Parameter_Wat_Omschrijving'
+        , 'Eenheid.Code'
+        , 'MeetApparaat.Omschrijving'
     ]
     meta = meta[keep]
 
