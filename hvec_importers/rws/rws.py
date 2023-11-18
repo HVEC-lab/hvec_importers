@@ -99,7 +99,11 @@ def data_single_name(
     stations = station_list()
     selected = hlp.create_selection_table(stations, name, quantity, start, end)
 
-    df = selected.groupby(['Code', 'Hoedanigheid.Code']).apply(
+    df = selected.groupby([
+          'Code'
+        , 'Locatie_MessageID'
+        , 'Hoedanigheid.Code'
+        , 'Eenheid.Code']).apply(
         lambda x: com.get_data(x, reduce))
 
     # The data from all codes is combined in a single dataframe
