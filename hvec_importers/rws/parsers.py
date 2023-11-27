@@ -114,10 +114,11 @@ def format_data(df, reduce = True):
 
     # The location column (Locatie) is a column of dictionaries
     LocatieLijst = pd.json_normalize(df['Locatie'])
+    LocatieLijst.drop(columns = ['Locatie_MessageID', 'Code'], inplace = True)
     #LocatieLijst.drop(columns = ['Locatie_MessageID', 'Code'], inplace = True)
 
     # ... and add to MetingenLijst while dropping the original column
-    df = pd.concat([df.drop(columns = 'Locatie'), LocatieLijst], axis = 1)
+    df = pd.concat([df.drop(columns = ['Locatie']), LocatieLijst], axis = 1)
 
     # Process the AquoMetadata in a similar way
     # But do not bother with unused columns
