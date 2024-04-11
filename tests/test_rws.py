@@ -16,7 +16,7 @@ from hvec_importers.rws import helpers as hlp
 import_tests =  [
         ('Den Helder', 'WATHTE', '1972-1-1', '31-12-1975', True),
         ('Lobith', 'Q', '3-2-1925', '10-10-1928', True),
-        ('Vlissingen', 'WATHTE', '1990-01-01', '1990-01-31', True),
+        ('Vlissingen', 'WATHTE', '1968-01-01', '1968-1-31', True),
         ('Tiel Waal', 'Q', '1978-01-01', '1978-12-31', False),
         #('Roompot binnen', 'WATHTE', '1-1-1989', '31-12-1991'),
         ('Harlingen', 'WATHTE', '2023-01-01', '2023-12-31', False),
