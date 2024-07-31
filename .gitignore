@@ -112,3 +112,6 @@ tests/__pycache__/test_mvb.cpython-311-pytest-7.4.2.pyc
 tests/__pycache__/test_psmsl.cpython-311-pytest-7.4.2.pyc
 tests/__pycache__/test_rws.cpython-311-pytest-7.4.2.pyc
 hvec_importers/knmi/settings.py
+hvec_importers/knmi/knmy/__pycache__/__init__.cpython-311.pyc
+hvec_importers/knmi/knmy/__pycache__/knmy.cpython-311.pyc
+hvec_importers/knmi/knmy/__pycache__/parser.cpython-311.pyc
