@@ -33,7 +33,7 @@ COMPARTMENT = ['OW', 'LT']
 CHUNK = 6
 
 # Minimum minutes per measurements (integer between 1 and 60)
-MIN_PER_MEAS = 10
+MIN_PER_MEAS = 1
 
 # Default date range
 DT_MIN = '1680-1-1'
