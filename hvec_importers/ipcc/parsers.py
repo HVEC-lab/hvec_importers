@@ -27,53 +27,26 @@ def ipcc_single_sheet(raw):
     --------
     https://sealevel.nasa.gov/ipcc-ar6-sea-level-projection-tool
     """
-    raw = raw.melt(
-        id_vars = [
-            'psmsl_id', 'process',
-            'confidence', 'scenario', 'quantile'
-            ])
-    
-    df = raw.loc[raw['quantile'] == 50]
-    df = df.rename(
-        columns = {
-        'variable': 'year',
-        'value': 'median'
-        })
-    df = df.drop(columns = 'quantile')
+    df = raw.melt(
+          id_vars = ['psmsl_id', 'process', 'confidence', 'scenario', 'quantile']
+        , var_name = 'year')
 
-    tmp = raw.loc[raw['quantile'] == 5]
-    tmp = tmp.rename(
-        columns = {
-        'variable': 'year',
-        'value': '90%_low'
-        })
-    tmp = tmp.drop(columns = 'quantile')
-    df = df.merge(
-        tmp, on = ['psmsl_id', 'process',
-        'confidence', 'scenario', 'year'], 
-        how = 'inner')
-
-
-    tmp = raw.loc[raw['quantile'] == 95]
-    tmp = tmp.rename(
-        columns = {
-        'variable': 'year',
-        'value': '90%_high'
-        })
-    tmp = tmp.drop(columns = 'quantile')
-    df = df.merge(
-        tmp, on = ['psmsl_id', 'process',
-        'confidence', 'scenario', 'year'],
-        how = 'inner')
-
-    factor = norm.ppf(0.95)  # Factor for estimating sigma
-    df['sigma'] = (df['90%_high'] - df['median']) / factor
-
-    df['year'] = pd.to_numeric(df['year'])
+    # Modify column names for clarity  
+    df['quantile'] = 'q_' + df['quantile'].astype(str) + '%'
 
     # Rates given in mm/yr. Set to SI units
-    num_cols = ['median', '90%_low', '90%_high', 'sigma']
-    df.loc[df['process'] == 'totalrates', num_cols] = df.loc[df['process'] == 'totalrates', num_cols].div(1000)
+    df.loc[df['process'] == 'totalrates', 'value'] = df.loc[df['process'] == 'totalrates', 'value'].div(1000)
+
+    # Set to format with quantiles in columns
+
+    # Rename column that ultimately lands as index name to avoid confusing name
+    df.rename(columns = {'quantile': 'index'}, inplace = True)
+    df = df.pivot(
+          columns = 'index'
+        , index = ['psmsl_id', 'process', 'confidence', 'scenario', 'year']
+        , values = 'value')
+    df.reset_index(inplace = True)
+   
     return df
 
 
