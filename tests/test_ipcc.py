@@ -33,17 +33,15 @@ def test_connections(id):
 )
 def test_data_single_id(id, expected_length):
     df = ipcc.data_single_id(id)
-    # length is the number of sheets in the workbook
     assert len(df) == expected_length
-
 
 @pyt.mark.parametrize(
     "name, expected_length",
     [
-        ("Delfzijl", 784),
-        ("Warnemunde 2", 784),
-        ("LIVERPOOL G", 784),
-        ("Vlissingen", 784)
+          ("Delfzijl", 784)
+        , ("Warnemunde 2", 784)
+        , ("LIVERPOOL G", 784)
+        , ("Vlissingen", 784)
     ]
 )
 def test_single_name(name, expected_length):
