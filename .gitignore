@@ -9,3 +9,4 @@ hvec_importers.egg-info
 tests/__pycache__
 hvec_importers/__pycache__
 .venv
+locations.json
