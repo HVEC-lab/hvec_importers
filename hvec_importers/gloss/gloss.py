@@ -22,9 +22,8 @@ import pandas as pd
 import numpy as np
 import datetime as dt
 
-sys.path.append('./hvec_importers')
-import helpers
-import parsers as parse
+from hvec_importers import helpers as helpers
+from hvec_importers import parsers as parse
 
 
 max_attempt = 5 # Maximum number of tries to contact a website
