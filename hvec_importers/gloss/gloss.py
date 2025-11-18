@@ -12,6 +12,7 @@ by name and GLOSS id implemented.
 """
 
 # Public packages
+import sys
 import warnings
 import io
 import logging
@@ -21,8 +22,9 @@ import pandas as pd
 import numpy as np
 import datetime as dt
 
-from hvec_importers import helpers
-from hvec_importers import parsers as parse
+sys.path.append('./hvec_importers')
+import helpers
+import parsers as parse
 
 
 max_attempt = 5 # Maximum number of tries to contact a website
