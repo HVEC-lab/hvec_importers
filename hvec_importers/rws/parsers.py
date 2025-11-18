@@ -8,7 +8,7 @@ import logging
 import pandas as pd
 import datetime as dt
 
-from hvec_importers.rws.constants import COMPARTMENT, MIN_PER_MEAS
+from hvec_importers.rws.constants import MIN_PER_MEAS
 
 
 def parse_station_list(raw):
@@ -35,7 +35,7 @@ def parse_station_list(raw):
     )
 
     # Limit the list to the compartment specified in the constants
-    merged = merged.query('`Compartiment.Code`.isin(@COMPARTMENT)')
+    #merged = merged.query('`Compartiment.Code`.isin(@COMPARTMENT)')
     # set station id as index
     return merged.set_index("Code")
 
