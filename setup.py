@@ -15,7 +15,7 @@ setup(
     author_email = admin['__author_email__'],
     description = 'Python package with importers '
                 'for several open data sources.',
-    long_description=long_description,
+    #long_description=long_description,
     license='MIT',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
