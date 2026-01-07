@@ -68,5 +68,6 @@ def parse_sonel_file(filepath: str) -> pd.DataFrame:
 
     # Clean column names
     df.columns = df.columns.str.strip('# ')
+    df.replace(columns = {'Year': 'Time'}, inplace=True)
     return df
   
