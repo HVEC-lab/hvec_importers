@@ -60,9 +60,13 @@ def parse_sonel_file(filepath: str) -> pd.DataFrame:
         , skiprows=start_row
     )
 
+    # Add metadata to DataFrame
     df['Site'] = site
     df['Lat'] = lat
     df['Lon'] = lon
     df['EPSG'] = 4326
+
+    # Clean column names
+    df.columns = df.columns.str.strip('# ')
     return df
   
