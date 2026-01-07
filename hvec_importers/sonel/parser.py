@@ -47,7 +47,7 @@ def parse_sonel_file(filepath: str) -> pd.DataFrame:
     line, _ = find_row(data, '# Site')
     site = line.split()[3]
 
-    line, _ = find_row(data, 'Latititude')
+    line, _ = find_row(data, 'Latitude')
     lat = float(line.split()[3])
 
     line, _ = find_row(data, 'Longitude')
