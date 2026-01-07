@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
-with open("README.rst", "r") as fh:
-    long_description = fh.read()
+#ith open("README.rst", "r") as fh:
+#    long_description = fh.read()
 
 # Get admin.
 admin = {}
