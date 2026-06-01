@@ -7,3 +7,4 @@ lxml
 openpyxl
 pytest
 matplotlib
+pytz

@@ -1,1 +1,3 @@
-This package contains solvers, parsers and visualisations for analysis of tides.
+This package contains import functions for a collection of data sources.
+
+HVEC-lab, 2022

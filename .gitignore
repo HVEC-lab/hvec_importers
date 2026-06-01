@@ -1,4 +1,13 @@
-.venv
-.gitignore
 hvec_importers/__pycache__/
-*.pyc
+hvec_importers/gloss/__pycache__/
+hvec_importers/knmi/__pycache__/
+hvec_importers/mvb/__pycache__/
+hvec_importers/rws/__pycache__/
+hvec_importers/psmsl/__pycache__/
+hvec_importers/ipcc/__pycache__/
+hvec_importers.egg-info
+tests/__pycache__
+hvec_importers/__pycache__
+.venv
+locations.json
+hvec_importers/knmi/knmy/__pycache__/
