@@ -27,7 +27,7 @@ WAIT = 0  # waiting time between site transactions
 LOCATION_FILE = 'locations.json'
 
 # Select main group of parameters by pre-selecting a compartment
-COMPARTMENT = ['OW', 'LT']
+#COMPARTMENT = ['OW', 'LT']
 
 # Calendar months in a chunk
 CHUNK = 6

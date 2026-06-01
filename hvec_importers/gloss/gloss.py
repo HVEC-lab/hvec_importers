@@ -12,6 +12,7 @@ by name and GLOSS id implemented.
 """
 
 # Public packages
+import sys
 import warnings
 import io
 import logging
@@ -21,7 +22,7 @@ import pandas as pd
 import numpy as np
 import datetime as dt
 
-from hvec_importers import helpers
+from hvec_importers import helpers as helpers
 from hvec_importers import parsers as parse
 
 

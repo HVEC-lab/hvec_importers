@@ -6,11 +6,13 @@ HVEC-lab, october 2022
 
 
 # Public packages
+import sys
 import pytest as pyt
 import requests
 
 # Company package
-from hvec_importers.gloss import gloss
+sys.path.append('./hvec_importers')
+from gloss import gloss
 
 
 @pyt.mark.parametrize(
