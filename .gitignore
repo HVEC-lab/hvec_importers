@@ -10,3 +10,4 @@ tests/__pycache__
 hvec_importers/__pycache__
 .venv
 locations.json
+hvec_importers/knmi/knmy/__pycache__/
