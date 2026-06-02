@@ -35,7 +35,7 @@ def create_selection_table(locations,
                              quantity codes and start and end dates
     """
     # Selection on name
-    selected = locations.query('Naam == (@name)', engine = 'python')
+    selected = locations.loc[locations.index == name]
 
     # Select location codes with specified quantity
     selected = selected[selected['Grootheid.Code'].isin([quantity])]
@@ -85,91 +85,26 @@ def date_series(start, end):
     return list(zip(starts, ends))
 
 
-def create_availability_request(location, start, end):
-    """
-    Prepare request to obtain data availability for given period and a single location code
-
-    Args:
-        location, dataframe: specification of a single location
-        start, end, datetime: start and end of interval
-
-    Output:
-        request, dictionary formatted in accordance with requirements of waterinfo
-    """
-    start_date_str, end_date_str = create_date_strings(start, end)
-
-    request = {
-        "AquoMetadataLijst": [{
-            "Compartiment": {"Code": location["Compartiment.Code"].squeeze()},
-            "Eenheid": {"Code": location["Eenheid.Code"].squeeze()}
-            }],
-        "LocatieLijst": [{
-            "X": location["X"].squeeze(),
-            "Y": location["Y"].squeeze(),
-            "Code": location["Code"].squeeze()
-            }],
-      "Periode": {
-        "Begindatumtijd": start_date_str,
-        "Einddatumtijd": end_date_str
-      }
-    }
-    return request
-
-
-def create_number_of_points_request(location, start, end):
-    """
-    Prepare request to obtain number of points per year for given period
-    and a single location code
-
-    Args:
-        location, dataframe: specification of a single location
-        start, end, datetime: start and end of interval
-
-    Output:
-        request, dictionary formatted in accordance with requirements of waterinfo
-    """
-    start_date_str, end_date_str = create_date_strings(start, end)
-
-    request = {
-        "AquoMetadataLijst": [{
-            "Compartiment": { "Code": location["Compartiment.Code"].squeeze()},
-            "Grootheid": {"Code": location["Grootheid.Code"].squeeze()},
-            "Eenheid": { "Code": location["Eenheid.Code"].squeeze()}
-        }],
-      "Groeperingsperiode": "Jaar",
-      "LocatieLijst": [{
-          "X": location['X'].squeeze(),
-          "Y": location['Y'].squeeze(),
-          "Code": location['Code'].squeeze()
-        }],
-      "Periode": {
-        "Begindatumtijd": start_date_str,
-        "Einddatumtijd": end_date_str
-        }
-    }
-    return request
-
-
 def create_data_request(location, start, end):
     """
     Prepare data request for specified period and location
     """
     start_date_str, end_date_str = create_date_strings(start, end)
-
+    
     request = {
-        "AquoPlusWaarnemingMetadata": {
+          "Locatie": {
+              "Code": location["Code"].squeeze()
+          },
+          "AquoPlusWaarnemingMetadata": {
             "AquoMetadata": {
-                "Eenheid": {"Code": location["Eenheid.Code"].squeeze()},
-                "Grootheid": {"Code": location["Grootheid.Code"].squeeze()},
-                "Hoedanigheid": {"Code": location["Hoedanigheid.Code"].squeeze()},
+                "Compartiment": {"Code": location["Compartiment.Code"].squeeze()},
+                "Grootheid": {"Code": location["Grootheid.Code"].squeeze()}
             }
-        },
-        "Locatie": {
-            "X": location["X"].squeeze(),
-            "Y": location["Y"].squeeze(),
-            # assert code is used as index
-            "Code": location["Code"].squeeze(),
-        },
-        "Periode": {"Begindatumtijd": start_date_str, "Einddatumtijd": end_date_str},
-    }
+          },
+        "Periode":
+            {
+                "Begindatumtijd": start_date_str,
+                "Einddatumtijd": end_date_str
+            }            
+        }
     return request

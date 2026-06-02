@@ -14,7 +14,7 @@ from hvec_importers.rws import helpers as hlp
 
 # Import test cases
 import_tests =  [
-        ('Den Helder', 'WATHTE', '1972-1-1', '31-12-1975', True),
+        ('denhelder.marsdiep', 'WATHTE', '1972-1-1', '31-12-1975', True),
         ('Lobith', 'Q', '3-2-1925', '10-10-1928', True),
         ('Vlissingen', 'WATHTE', '1968-01-01', '1968-1-31', True),
         ('Tiel Waal', 'Q', '1978-01-01', '1978-12-31', False),
@@ -30,11 +30,7 @@ import_tests =  [
     "endpoint",
     [
         'collect_catalogue',
-        'collect_observations',
-        'collect_latest_observations',
-        'check_observations_available',
-        'collect_number_of_observations',
-        'request_bulk_observations']
+        'collect_observations']
 )
 
 def test_connections(endpoint):

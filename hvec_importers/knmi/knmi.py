@@ -6,8 +6,8 @@ Wrapper around Bart Hoekstra's excellent knmy functions
 HVEC-lab, 2024
 """
 
-#from hvec_importers.knmi.knmy import knmy
-
+from .knmy import knmy
+from .knmy import parser
 
 # Station list
 

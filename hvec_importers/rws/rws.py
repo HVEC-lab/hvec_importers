@@ -97,18 +97,16 @@ def data_single_name(
         end, string or datetime; end date
     """
     stations = station_list()
+    stations['_code'] = stations.index # Copy code column to ensure availability after grouping
     selected = hlp.create_selection_table(stations, name, quantity, start, end)
 
     df = selected.groupby([
-          'Code'
-        , 'Locatie_MessageID'
-        , 'Hoedanigheid.Code'
-        , 'Eenheid.Code']).apply(
+          '_code']).apply(
         lambda x: com.get_data(x, reduce))
 
     # The data from all codes is combined in a single dataframe
     # Drop the resulting multi-index
     df.reset_index(inplace = True)
-    df.drop(columns = 'level_4', inplace = True)
+    df.drop(columns = 'level_1', inplace = True)
 
     return df
