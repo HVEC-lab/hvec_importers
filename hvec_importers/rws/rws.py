@@ -97,7 +97,7 @@ def data_single_name(
         end, string or datetime; end date
     """
     stations = station_list()
-    stations['_code'] = stations.index # Copy code column to ensure availability after grouping
+    stations['_code'] = stations['Code'] # Copy code column to ensure availability after grouping
     selected = hlp.create_selection_table(stations, name, quantity, start, end)
 
     df = selected.groupby([

@@ -13,7 +13,7 @@ from hvec_importers.rws.constants import CHUNK
 
 
 def create_selection_table(locations,
-    name, quantity,
+    code, quantity,
     start = '1800-01-01',
     end = '2100-12-31'):
     """
@@ -35,7 +35,7 @@ def create_selection_table(locations,
                              quantity codes and start and end dates
     """
     # Selection on name
-    selected = locations.loc[locations.index == name]
+    selected = locations.loc[locations['Code'] == code]
 
     # Select location codes with specified quantity
     selected = selected[selected['Grootheid.Code'].isin([quantity])]
