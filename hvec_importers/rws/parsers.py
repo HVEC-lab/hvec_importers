@@ -36,8 +36,7 @@ def parse_station_list(raw):
 
     # Limit the list to the compartment specified in the constants
     #merged = merged.query('`Compartiment.Code`.isin(@COMPARTMENT)')
-    # set station id as index
-    return merged.set_index("Code")
+    return merged #.set_index("Code")
 
 
 def parse_data(raw):
