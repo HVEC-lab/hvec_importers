@@ -97,16 +97,17 @@ def data_single_name(
         end, string or datetime; end date
     """
     stations = station_list()
-    stations['_code'] = stations['Code'] # Copy code column to ensure availability after grouping
     selected = hlp.create_selection_table(stations, name, quantity, start, end)
 
-    df = selected.groupby([
-          '_code']).apply(
-        lambda x: com.get_data(x, reduce))
+    # Keep it simple; use a for-loop to ensure single lines of the selection table are fed to the import function
+    # Repeated lines occur for several reasons, such as the availability of measurements and forecasts for the same
+    # quantity. The for loop and import by line is the most robust solution.
+    df = pd.DataFrame()
+    for row in selected.iterrows():
+        tmp = com.get_data(row[1], reduce)
+        df = pd.concat([df, tmp])
 
     # The data from all codes is combined in a single dataframe
     # Drop the resulting multi-index
     df.reset_index(inplace = True)
-    df.drop(columns = 'level_1', inplace = True)
-
     return df

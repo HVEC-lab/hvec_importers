@@ -64,14 +64,14 @@ def parse_data(raw):
         meta = ['Locatie', 'AquoMetadata'])
 
     # Keep only the relevant columns
-    keep = [
-        'Tijdstip',
-        'Meetwaarde.Waarde_Numeriek',
-        'WaarnemingMetadata.Statuswaarde',
-        'Locatie',
-        'AquoMetadata'
-        ]
-    df = df[keep]
+    #keep = [
+    #    'Tijdstip',
+    #    'Meetwaarde.Waarde_Numeriek',
+    #    'WaarnemingMetadata.Statuswaarde',
+    #    'Locatie',
+    #    'AquoMetadata'
+    #    ]
+    #df = df[keep]
     return df
 
 
@@ -120,13 +120,14 @@ def format_data(df, reduce = True):
     # Process the AquoMetadata in a similar way
     # But do not bother with unused columns
     meta = pd.json_normalize(df['AquoMetadata'])
-    keep = [
-          'Grootheid.Code'
-        , 'Parameter_Wat_Omschrijving'
-        , 'Eenheid.Code'
-        , 'MeetApparaat.Omschrijving'
-    ]
-    meta = meta[keep]
+    #keep = [
+    #      'Grootheid.Code'
+    #    , 'Parameter_Wat_Omschrijving'
+    #    , 'Eenheid.Code'
+    #    , 'MeetApparaat.Omschrijving'
+    #    , 'ProcesType'
+    #]
+    #meta = meta[keep]
 
     df = pd.concat(
         [df.drop(columns = 'AquoMetadata'), meta], axis = 1)
@@ -153,5 +154,4 @@ def format_data(df, reduce = True):
 
     # Sort by date
     df.sort_values(by = 'Tijdstip', inplace = True)
-
     return df
