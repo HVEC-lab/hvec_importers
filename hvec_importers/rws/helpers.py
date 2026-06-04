@@ -41,6 +41,12 @@ def create_selection_table(locations,
     selected = selected[selected['Grootheid.Code'].isin([quantity])]
     selected.reset_index(inplace=True)
 
+    # In the new data format (2026) the same quantity is available as observation, astronomical forecast and
+    # operational forecast (called ProcesType). Therefore, the selection on location and quantity may duplicate.
+    # The data is imported irrespective of the ProcesType where the ProcesType is part of the output for later use.
+    # Therefore, the duplicated location/quantity pairs need to be taken out.
+    selected.drop_duplicates(subset = ['Code', 'Grootheid.Code'], inplace = True)
+
     # Add dates to specification
     selected['start'] = start
     selected['end'] = end
@@ -70,9 +76,6 @@ def date_series(start, end):
     start = dateutil.parser.parse(start)
     end =   dateutil.parser.parse(end)
 
-    # Prevent looking for data after today
-    end = min(end, dt.datetime.today())
-
     #interval = end - start
     #if interval < dt.timedelta(days = 366):
     #    return list(zip(start, end))
@@ -93,12 +96,12 @@ def create_data_request(location, start, end):
     
     request = {
           "Locatie": {
-              "Code": location["Code"].squeeze()
+              "Code": location["Code"]
           },
           "AquoPlusWaarnemingMetadata": {
             "AquoMetadata": {
-                "Compartiment": {"Code": location["Compartiment.Code"].squeeze()},
-                "Grootheid": {"Code": location["Grootheid.Code"].squeeze()}
+                "Compartiment": {"Code": location["Compartiment.Code"]},
+                "Grootheid": {"Code": location["Grootheid.Code"]}
             }
           },
         "Periode":

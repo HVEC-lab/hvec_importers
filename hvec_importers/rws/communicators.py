@@ -145,7 +145,7 @@ def get_data(location, reduce):
     session = requests.Session()
 
     # Prepare date range
-    date_range = hlp.date_series(location['start'].squeeze(), location['end'].squeeze())
+    date_range = hlp.date_series(location['start'], location['end'])
 
     for (start_i, end_i) in tqdm(date_range):
         time.sleep(WAIT)
