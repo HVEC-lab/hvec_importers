@@ -94,20 +94,17 @@ def create_data_request(location, start, end):
     """
     start_date_str, end_date_str = create_date_strings(start, end)
     
-    request = {
-          "Locatie": {
-              "Code": location["Code"]
-          },
-          "AquoPlusWaarnemingMetadata": {
-            "AquoMetadata": {
+    request = {}
+    request['Locatie'] = {"Code": location["Code"]}
+    request['AquoPlusWaarnemingMetadata'] = {
+        "AquoMetadata": {
                 "Compartiment": {"Code": location["Compartiment.Code"]},
-                "Grootheid": {"Code": location["Grootheid.Code"]}
+                "Grootheid": {"Code": location["Grootheid.Code"]},
+                "ProcesType": "meting"
             }
-          },
-        "Periode":
-            {
+    }
+    request['Periode'] = {
                 "Begindatumtijd": start_date_str,
                 "Einddatumtijd": end_date_str
-            }            
-        }
+            }
     return request

@@ -106,8 +106,4 @@ def data_single_name(
     for row in selected.iterrows():
         tmp = com.get_data(row[1], reduce)
         df = pd.concat([df, tmp])
-
-    # The data from all codes is combined in a single dataframe
-    # Drop the resulting multi-index
-    df.reset_index(inplace = True)
     return df
